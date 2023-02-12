@@ -48,7 +48,7 @@ private:
     sf::RenderWindow window;
     sf::Clock deltaClock;
     sf::Clock elapsed;
-    const sf::Time timePerFrame = sf::seconds(1.0f / 60.0f);
+    const sf::Time timePerFrame = sf::seconds(1.0f / APPLICATION_FPS);
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
     Splash splash = Splash();
