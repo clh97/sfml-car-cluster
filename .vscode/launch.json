@@ -1,0 +1,18 @@
+{
+  "configurations": [
+    {
+      "name": "C/C++: clang++ build and debug active file",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/bin/main",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}/src",
+      "environment": [],
+      "externalConsole": true,
+      "MIMode": "lldb",
+      "preLaunchTask": "Link"
+    }
+  ],
+  "version": "2.0.0"
+}

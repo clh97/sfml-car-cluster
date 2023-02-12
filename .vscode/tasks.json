@@ -1,0 +1,45 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-std=c++17",
+                "-I/usr/local/include",
+                "-I/opt/homebrew/Cellar/sfml/2.5.1_2/include",
+                "-I${workspaceFolder}/src",
+                "-c",
+                "${workspaceFolder}/src/*.cpp",
+                "-o",
+                "${workspaceFolder}/bin/main.o"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Link",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "${workspaceFolder}/bin/main.o",
+                "-o",
+                "${workspaceFolder}/bin/main",
+                "-L/usr/local/lib",
+                "-L/opt/homebrew/lib",
+                "-L/opt/homebrew/Cellar/sfml/2.5.1_2/lib",
+                "-lsfml-graphics",
+                "-lsfml-window",
+                "-lsfml-system"
+            ],
+            "dependsOn": "Build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
