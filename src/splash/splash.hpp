@@ -5,6 +5,7 @@ class Splash
 {
 public:
   Splash();
+  ~Splash();
   void draw(sf::RenderWindow &window);
   bool update();
   bool isDone();

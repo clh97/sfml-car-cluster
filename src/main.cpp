@@ -2,8 +2,9 @@
 #include <cmath>
 #include <random>
 
+#include "font.hpp"
 #include "splash/splash.cpp"
-// #include "velocimeter/velocimeter.cpp"
+#include "cluster/cluster.cpp"
 
 using namespace std;
 
@@ -50,15 +51,20 @@ private:
     const sf::Time timePerFrame = sf::seconds(1.0f / 60.0f);
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
-    sf::VertexArray vertices = sf::VertexArray(sf::Points, 1000);
     Splash splash = Splash();
+    Cluster cluster = Cluster();
 
     void render(sf::RenderWindow &window)
     {
         window.clear(sf::Color::Black);
-        // window.draw(this->vertices);
 
-        this->splash.draw(window);
+        if (!this->splash.isDone())
+        {
+            this->splash.draw(window);
+            return;
+        }
+
+        this->cluster.draw(window);
     }
 
     void update(sf::Time elapsed)
@@ -67,7 +73,12 @@ private:
         if (!this->splash.isDone())
         {
             this->splash.update();
+            return;
         }
+
+        this->cluster.update();
+
+        cout << "FPS: " << 1.0f / elapsed.asSeconds() << endl;
     };
 };
 
