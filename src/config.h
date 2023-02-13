@@ -3,7 +3,7 @@
 
 #define PI 3.14159265358979323846f
 
-#define SKIP_SPLASH true
+#define SKIP_SPLASH false
 #define SPLASH_FADEIN_TIME 2.0f
 #define SPLASH_FADEOUT_TIME 1.15f
 
