@@ -77,8 +77,6 @@ private:
         }
 
         this->cluster.update();
-
-        cout << "FPS: " << 1.0f / elapsed.asSeconds() << endl;
     };
 };
 
