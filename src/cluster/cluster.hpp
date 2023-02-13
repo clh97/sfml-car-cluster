@@ -23,5 +23,7 @@ private:
       sf::Vector2f(RPM_X, RPM_Y),
       sf::Vector2f(RPM_WIDTH, RPM_HEIGHT),
       0, 8000);
+  float speed = 0;
+  float rpmValue = 0;
   sf::Clock elapsed;
 };

@@ -20,6 +20,7 @@ private:
   sf::Text m_text;
   sf::CircleShape m_dial;
   sf::RectangleShape m_needle;
+  sf::CircleShape m_needle_center;
 
   float min;
   float max;
