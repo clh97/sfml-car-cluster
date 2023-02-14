@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics.hpp>
 #include <cmath>
+#include <vector>
 
 class Velocimeter : public sf::Drawable
 {
@@ -21,6 +22,7 @@ private:
   sf::CircleShape m_dial;
   sf::RectangleShape m_needle;
   sf::CircleShape m_needle_center;
+  std::vector<sf::RectangleShape> m_ticks;
 
   float min;
   float max;
