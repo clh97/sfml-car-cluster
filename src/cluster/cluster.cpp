@@ -10,10 +10,10 @@ Cluster::~Cluster()
 {
 }
 
-void Cluster::update()
+void Cluster::update(sf::Time elapsed)
 {
-  this->speedometer.update(0.0f);
-  this->rpm.update(0.0f);
+  this->speedometer.update(elapsed);
+  this->rpm.update(elapsed);
 
   this->speed += 1 * 0.25f;
   this->rpmValue += 100 * 0.25f;

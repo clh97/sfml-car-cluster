@@ -77,7 +77,7 @@ private:
             return;
         }
 
-        this->cluster.update();
+        this->cluster.update(elapsed);
     };
 };
 

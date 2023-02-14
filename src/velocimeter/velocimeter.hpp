@@ -8,11 +8,11 @@ class Velocimeter : public sf::Drawable
 {
 public:
   Velocimeter(const sf::Font &font, const sf::Vector2f &position,
-              const sf::Vector2f &size, float min, float max);
+              const sf::Vector2f &size, float min, float max, std::string textSuffix = "");
 
   void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
-  void update(float dt);
+  void update(sf::Time elapsed);
 
   void setValue(float value);
 
@@ -28,5 +28,6 @@ private:
   float max;
   float value;
   const float dialRadius = 200.f;
-  const float needleLength = dialRadius * 0.8f;
+  const float needleLength = dialRadius * 0.95f;
+  std::string textSuffix;
 };

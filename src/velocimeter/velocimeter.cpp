@@ -1,13 +1,12 @@
 #include "velocimeter.hpp"
 #include "effects/interpolate.hpp"
 
-void Velocimeter::update(float dt)
+void Velocimeter::update(sf::Time elapsed)
 {
-  m_text.setCharacterSize(32);
-  m_text.setString(std::to_string((int)this->value));
+  m_text.setCharacterSize(50);
+  m_text.setString(std::to_string((int)this->value) + textSuffix);
   m_text.setColor(sf::Color::White);
-  m_text.setPosition(m_dial.getPosition().x - m_text.getGlobalBounds().width / 2,
-                     m_dial.getPosition().y + this->dialRadius * 0.5f);
+  m_text.setOrigin(m_text.getLocalBounds().width / 2.f, m_text.getLocalBounds().height / 2.f);
 
   m_ticks.clear();
   m_ticks.reserve((int)max - (int)min);
@@ -74,14 +73,14 @@ void Velocimeter::draw(sf::RenderTarget &target, sf::RenderStates states) const
 }
 
 Velocimeter::Velocimeter(const sf::Font &font, const sf::Vector2f &position,
-                         const sf::Vector2f &size, float min, float max)
-    : m_dial(), m_needle_center(), m_needle(), m_text(), min(min), max(max)
+                         const sf::Vector2f &size, float min, float max, std::string textSuffix)
+    : m_dial(), m_needle_center(), m_needle(), m_text(), min(min), max(max), textSuffix(textSuffix)
 {
   value = min;
 
   m_dial.setRadius(this->dialRadius);
   m_dial.setFillColor(sf::Color::Black);
-  m_dial.setOutlineColor(sf::Color::White);
+  m_dial.setOutlineColor(sf::Color(255, 255, 255, 50));
   m_dial.setOutlineThickness(2.f);
   m_dial.setOrigin(this->dialRadius, this->dialRadius);
   m_dial.setPosition(position.x + size.x / 2, position.y + size.y / 2);
@@ -92,12 +91,15 @@ Velocimeter::Velocimeter(const sf::Font &font, const sf::Vector2f &position,
   m_needle.setPosition(position.x + size.x / 2, position.y + size.y / 2);
   m_needle.setRotation(45.f);
 
-  m_needle_center.setRadius(this->dialRadius * 0.1f);
-  m_needle_center.setFillColor(sf::Color::White);
-  m_needle_center.setOrigin(this->dialRadius * 0.1f, this->dialRadius * 0.1f);
+  m_needle_center.setRadius(this->dialRadius * 0.7f);
+  m_needle_center.setFillColor(sf::Color::Black);
+  // m_needle_center.setOutlineColor(sf::Color::White);
+  // m_needle_center.setOutlineThickness(2.f);
+  m_needle_center.setOrigin(this->dialRadius * 0.7f, this->dialRadius * 0.7f);
   m_needle_center.setPosition(position.x + size.x / 2, position.y + size.y / 2);
 
   m_text.setFont(font);
   m_text.setFillColor(sf::Color::White);
-  m_text.setPosition(position.x + size.x / 2 - m_text.getGlobalBounds().width, position.y + size.y / 2 + this->dialRadius * 0.5f);
+  m_text.setOrigin(m_text.getLocalBounds().width / 2.f, m_text.getLocalBounds().height / 2.f);
+  m_text.setPosition(position.x + size.x / 2, position.y + size.y / 2);
 }
