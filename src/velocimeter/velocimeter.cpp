@@ -77,6 +77,8 @@ Velocimeter::Velocimeter(const sf::Font &font, const sf::Vector2f &position,
                          const sf::Vector2f &size, float min, float max)
     : m_dial(), m_needle_center(), m_needle(), m_text(), min(min), max(max)
 {
+  value = min;
+
   m_dial.setRadius(this->dialRadius);
   m_dial.setFillColor(sf::Color::Black);
   m_dial.setOutlineColor(sf::Color::White);

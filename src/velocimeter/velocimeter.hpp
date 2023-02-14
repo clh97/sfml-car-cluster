@@ -26,7 +26,7 @@ private:
 
   float min;
   float max;
-  float value = 0.0f;
+  float value;
   const float dialRadius = 200.f;
   const float needleLength = dialRadius * 0.8f;
 };
