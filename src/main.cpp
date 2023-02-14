@@ -14,6 +14,7 @@ public:
     Application()
     {
         this->window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW_TITLE, WINDOW_STYLE);
+        this->window.setFramerateLimit(APPLICATION_FPS);
         this->deltaClock.restart();
         this->elapsed.restart();
     }
