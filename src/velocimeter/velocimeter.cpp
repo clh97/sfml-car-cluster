@@ -64,6 +64,7 @@ void Velocimeter::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
   target.draw(m_dial);
   target.draw(m_needle);
+  target.draw(m_background, &m_circular_gradient_shader);
   target.draw(m_needle_center);
   target.draw(m_text);
   for (const auto &tick : m_ticks)
@@ -74,7 +75,7 @@ void Velocimeter::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 Velocimeter::Velocimeter(const sf::Font &font, const sf::Vector2f &position,
                          const sf::Vector2f &size, float min, float max, std::string textSuffix)
-    : m_dial(), m_needle_center(), m_needle(), m_text(), min(min), max(max), textSuffix(textSuffix)
+    : m_dial(), m_needle_center(), m_needle(), m_text(), min(min), max(max), textSuffix(textSuffix), m_background()
 {
   value = min;
 
@@ -85,7 +86,7 @@ Velocimeter::Velocimeter(const sf::Font &font, const sf::Vector2f &position,
   m_dial.setOrigin(this->dialRadius, this->dialRadius);
   m_dial.setPosition(position.x + size.x / 2, position.y + size.y / 2);
 
-  m_needle.setSize(sf::Vector2f(needleLength, 5.f));
+  m_needle.setSize(sf::Vector2f(needleLength, 6.f));
   m_needle.setFillColor(sf::Color::Red);
   m_needle.setOrigin(needleLength, 0.0f);
   m_needle.setPosition(position.x + size.x / 2, position.y + size.y / 2);
@@ -102,4 +103,16 @@ Velocimeter::Velocimeter(const sf::Font &font, const sf::Vector2f &position,
   m_text.setFillColor(sf::Color::White);
   m_text.setOrigin(m_text.getLocalBounds().width / 2.f, m_text.getLocalBounds().height / 2.f);
   m_text.setPosition(position.x + size.x / 2, position.y + size.y / 2);
+
+  m_circular_gradient_shader.loadFromFile("shaders/circular_gradient.frag", sf::Shader::Fragment);
+  m_circular_gradient_shader.setUniform("center", sf::Glsl::Vec2(position.x + size.x / 2, position.y + size.y / 2));
+  m_circular_gradient_shader.setUniform("radius", this->dialRadius);
+  m_circular_gradient_shader.setUniform("innerColor", sf::Glsl::Vec4(1.0f, 1.0f, 1.0f, 1.0f));
+  m_circular_gradient_shader.setUniform("outerColor", sf::Glsl::Vec4(1.0f, 1.0f, 1.0f, 0.2f));
+
+  m_background.setRadius(this->dialRadius);
+  m_background.setOrigin(this->dialRadius, this->dialRadius);
+  m_background.setPosition(position.x + size.x / 2, position.y + size.y / 2);
+
+  this->update(sf::Time::Zero);
 }
