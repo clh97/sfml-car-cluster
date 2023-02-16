@@ -13,11 +13,11 @@ public:
   void draw(sf::RenderWindow &window);
 
 private:
-  Velocimeter speedometer = Velocimeter(
-      OpenSans::GetInstance().GetFont(),
-      sf::Vector2f(VELOCIMETER_X, VELOCIMETER_Y),
-      sf::Vector2f(VELOCIMETER_WIDTH, VELOCIMETER_HEIGHT),
-      0, 200, " km/h");
+  // Velocimeter speedometer = Velocimeter(
+  // OpenSans::GetInstance().GetFont(),
+  // sf::Vector2f(VELOCIMETER_X, VELOCIMETER_Y),
+  // sf::Vector2f(VELOCIMETER_WIDTH, VELOCIMETER_HEIGHT),
+  // 0, 200, " km/h");
   Velocimeter rpm = Velocimeter(
       OpenSans::GetInstance().GetFont(),
       sf::Vector2f(RPM_X, RPM_Y),

@@ -18,11 +18,14 @@ void Velocimeter::update(sf::Time elapsed)
     float angle = 90.0f - (value - min) / (max - min) * 225.f;
     bool odd = iteration % 2;
     float tickLength = odd ? this->dialRadius * 0.1f : this->dialRadius * 0.05f;
+    float tickWidth = odd ? 2.5f : 1.f;
     sf::Color tickColor = odd ? sf::Color::Red : sf::Color::White;
 
     sf::RectangleShape line(sf::Vector2f(2.f, tickLength));
-    line.setFillColor(tickColor);
     line.setOrigin(1.f, this->dialRadius * 0.9f);
+    line.setFillColor(tickColor);
+    line.setOutlineColor(tickColor);
+    line.setOutlineThickness(tickWidth);
     line.setRotation(angle);
     line.setPosition(m_dial.getPosition().x, m_dial.getPosition().y);
 
