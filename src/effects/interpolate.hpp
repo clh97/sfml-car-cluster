@@ -21,4 +21,13 @@ public:
     float result = (value - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
     return result;
   }
+
+  static sf::Color rgbaInterpolate(sf::Color start, sf::Color end, float percent)
+  {
+    int r = linearInterpolate(start.r, end.r, percent);
+    int g = linearInterpolate(start.g, end.g, percent);
+    int b = linearInterpolate(start.b, end.b, percent);
+    int a = linearInterpolate(start.a, end.a, percent);
+    return sf::Color(r, g, b, a);
+  }
 };
