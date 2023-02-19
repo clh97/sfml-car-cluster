@@ -66,14 +66,14 @@ void Velocimeter::setValue(float value)
 void Velocimeter::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
   target.draw(m_dial);
-  target.draw(m_needle);
   target.draw(m_background, &m_circular_gradient_shader);
-  target.draw(m_needle_center);
-  target.draw(m_text);
   for (const auto &tick : m_ticks)
   {
     target.draw(tick);
   }
+  target.draw(m_needle);
+  target.draw(m_needle_center);
+  target.draw(m_text);
 }
 
 Velocimeter::Velocimeter(const sf::Font &font, const sf::Vector2f &position,
