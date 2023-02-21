@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics.hpp>
 #include <cmath>
 #include <vector>
 
@@ -29,7 +28,7 @@ private:
   float min;
   float max;
   float value;
-  const float dialRadius = 200.f;
+  float dialRadius;
   const float needleLength = dialRadius;
   std::string textSuffix;
 };

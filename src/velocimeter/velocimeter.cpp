@@ -78,7 +78,7 @@ void Velocimeter::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 Velocimeter::Velocimeter(const sf::Font &font, const sf::Vector2f &position,
                          const sf::Vector2f &size, float min, float max, std::string textSuffix)
-    : m_dial(), m_needle_center(), m_needle(), m_text(), min(min), max(max), textSuffix(textSuffix), m_background()
+    : m_dial(), m_needle_center(), m_needle(), m_text(), min(min), max(max), dialRadius(size.x), textSuffix(textSuffix), m_background()
 {
   value = min;
 
