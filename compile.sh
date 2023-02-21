@@ -1,0 +1,1 @@
+g++ -std=c++17 -I/usr/local/include -I/home/chimas/sfml-car-cluster/src -c /home/chimas/sfml-car-cluster/src/*.cpp -o /home/chimas/sfml-car-cluster/bin/main.o && g++ /home/chimas/sfml-car-cluster/bin/main.o -o /home/chimas/sfml-car-cluster/bin/main -L/usr/local/lib -lsfml-graphics -lsfml-window -lsfml-system -lgbm

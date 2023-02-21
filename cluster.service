@@ -1,0 +1,9 @@
+[Unit]
+Description=SFML DRM Car cluster
+
+[Service]
+Type=simple
+ExecStart=/home/chimas/sfml-car-cluster/run.sh
+
+[Install]
+WantedBy=multi-user.target

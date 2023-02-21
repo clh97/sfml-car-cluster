@@ -3,14 +3,14 @@
 
 #define PI 3.14159265358979323846f
 
-#define SKIP_SPLASH true
+#define SKIP_SPLASH false
 #define SPLASH_FADEIN_TIME 2.0f
 #define SPLASH_FADEOUT_TIME 1.15f
 
 #define WINDOW_TITLE "Car Cluster"
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 550
-#define WINDOW_STYLE sf::Style::None
+#define WINDOW_STYLE sf::Style::Fullscreen
 
 #define APPLICATION_FPS 60
 
