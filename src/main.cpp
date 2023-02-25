@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cmath>
 #include <random>
+#include <imgui/imgui.h>
+#include <imgui/imgui-SFML.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
 
 #include "font.hpp"
 #include "splash/splash.cpp"
@@ -14,6 +17,9 @@ public:
     Application()
     {
         this->window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW_TITLE, WINDOW_STYLE);
+
+        ImGui::SFML::Init(this->window);
+
         this->window.setFramerateLimit(APPLICATION_FPS);
 
         this->background.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
@@ -27,7 +33,6 @@ public:
         this->background_shader.setUniform("outerColor", sf::Glsl::Vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
         this->deltaClock.restart();
-        this->elapsed.restart();
     }
 
     void run()
@@ -36,24 +41,28 @@ public:
         {
             this->timeSinceLastUpdate += this->deltaClock.restart();
 
-            sf::Event Event;
-            while (this->window.pollEvent(Event))
+            sf::Event event;
+            while (this->window.pollEvent(event))
             {
-                if (Event.type == sf::Event::Closed || (Event.type == sf::Event::KeyPressed && Event.key.code == sf::Keyboard::Escape))
+                ImGui::SFML::ProcessEvent(event);
+                if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
                     this->window.close();
             }
-
-            sf::Time elapsed = this->deltaClock.getElapsedTime();
 
             while (this->timeSinceLastUpdate > this->timePerFrame)
             {
                 this->timeSinceLastUpdate -= this->timePerFrame;
+                ImGui::SFML::Update(this->window, this->timePerFrame);
                 this->update(this->timePerFrame);
             }
 
             this->render(this->window);
+            ImGui::SFML::Render(this->window);
+
             this->window.display();
         }
+
+        ImGui::SFML::Shutdown();
     }
 
 private:
@@ -61,7 +70,6 @@ private:
     sf::RectangleShape background;
     sf::Shader background_shader;
     sf::Clock deltaClock;
-    sf::Clock elapsed;
     const sf::Time timePerFrame = sf::seconds(1.0f / APPLICATION_FPS);
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
