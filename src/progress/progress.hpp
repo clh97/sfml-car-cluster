@@ -8,27 +8,27 @@
 class Progress : public sf::Drawable
 {
 public:
-  Progress(
-      const sf::Vector2f &position,
-      float radius,
-      float min,
-      float max,
-      sf::Color background_color = sf::Color::White,
-      sf::Color progress_color = sf::Color::Red);
+    Progress(
+        const sf::Vector2f &position,
+        float radius,
+        float min,
+        float max,
+        sf::Color background_color = sf::Color::White,
+        sf::Color progress_color = sf::Color::Red);
 
-  void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+    void draw(sf::RenderTarget &target, const sf::RenderStates &states) const override;
 
-  void update(sf::Time elapsed);
+    void update(sf::Time elapsed);
 
-  void setValue(float value);
+    void setValue(float value);
 
 private:
-  sf::CircleShape m_background;
-  sf::Vector2f m_position;
-  sf::VertexArray m_vertexArray;
+    sf::CircleShape m_background;
+    sf::Vector2f m_position;
+    sf::VertexArray m_vertexArray;
 
-  float min;
-  float max;
-  float value;
-  float radius;
+    float min;
+    float max;
+    float value;
+    float radius;
 };

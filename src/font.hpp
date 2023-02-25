@@ -6,26 +6,26 @@
 class OpenSans
 {
 public:
-  static OpenSans &GetInstance()
-  {
-    static OpenSans instance;
-    return instance;
-  }
+    static OpenSans &GetInstance()
+    {
+        static OpenSans instance;
+        return instance;
+    }
 
-  sf::Font &GetFont() { return font_; }
+    sf::Font &GetFont() { return font_; }
 
 private:
-  OpenSans()
-  {
-    if (font_.loadFromFile(FONT_PATH))
+    OpenSans()
     {
-      std::cout << "Font loaded successfully" << std::endl;
+        if (font_.loadFromFile(FONT_PATH))
+        {
+            std::cout << "Font loaded successfully" << std::endl;
+        }
+        else
+        {
+            std::cout << "Font failed to load" << std::endl;
+        }
     }
-    else
-    {
-      std::cout << "Font failed to load" << std::endl;
-    }
-  }
 
-  sf::Font font_;
+    sf::Font font_;
 };

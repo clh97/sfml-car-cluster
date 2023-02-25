@@ -4,16 +4,16 @@
 class Splash
 {
 public:
-  Splash();
-  ~Splash();
-  void draw(sf::RenderWindow &window);
-  bool update();
-  bool isDone();
+    Splash();
+    ~Splash();
+    void draw(sf::RenderWindow &window);
+    bool update();
+    bool isDone();
 
 private:
-  bool splashDone = false;
-  bool splashEntryDone = false;
-  sf::Texture splashTexture;
-  sf::Sprite splashSprite;
-  sf::Clock splashClock;
+    bool splashDone = false;
+    bool splashEntryDone = false;
+    sf::Texture splashTexture;
+    sf::Sprite splashSprite;
+    sf::Clock splashClock;
 };
