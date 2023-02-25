@@ -12,6 +12,7 @@
                 "-Wextra",
                 "-Wformat",
                 "-fdiagnostics-color=always",
+                "-I/opt/homebrew/include",
                 "-I/usr/local/include",
                 "-I/${workspaceFolder}/src",
                 "${workspaceFolder}/src/*.cpp",
@@ -30,6 +31,7 @@
             "command": "g++",
             "args": [
                 "${workspaceFolder}/bin/main.o",
+                "-L/opt/homebrew/lib",
                 "-L/usr/local/lib",
                 "-o",
                 "${workspaceFolder}/bin/main",
