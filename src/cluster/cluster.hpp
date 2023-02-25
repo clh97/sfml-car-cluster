@@ -13,35 +13,41 @@ public:
     Cluster();
     ~Cluster();
 
-    void update(sf::Time elapsed);
+    void update(sf::Time deltaTime);
     void draw(sf::RenderWindow &window);
+
+    float speedValue = 0;
+    float rpmValue = 0;
+    float fuelValue = 0;
+    float oilValue = 0;
+    float temperatureValue = 0;
 
 private:
     Velocimeter speedometer = Velocimeter(
         OpenSans::GetInstance().GetFont(),
-        sf::Vector2f(VELOCIMETER_X, VELOCIMETER_Y),
-        sf::Vector2f(VELOCIMETER_WIDTH, VELOCIMETER_HEIGHT),
-        0, 200, " km/h");
-    // Velocimeter rpm = Velocimeter(
-    //     OpenSans::GetInstance().GetFont(),
-    //     sf::Vector2f(RPM_X, RPM_Y),
-    //     sf::Vector2f(RPM_WIDTH, RPM_HEIGHT),
-    //     0, 8000, " rpm");
-    Progress rpm = Progress(
+        sf::Vector2f(SPEEDOMETER_X, SPEEDOMETER_Y),
+        sf::Vector2f(SPEEDOMETER_RADIUS, SPEEDOMETER_RADIUS),
+        SPEEDOMETER_MIN_VALUE, SPEEDOMETER_MAX_VALUE, " km/h");
+    Velocimeter rpm = Velocimeter(
+        OpenSans::GetInstance().GetFont(),
         sf::Vector2f(RPM_X, RPM_Y),
-        RPM_RADIUS,
-        0, 8000);
+        sf::Vector2f(RPM_RADIUS, RPM_RADIUS),
+        RPM_MIN_VALUE, RPM_MAX_VALUE, " rpm");
+    // Progress rpm = Progress(
+    //     sf::Vector2f(RPM_X, RPM_Y),
+    //     RPM_RADIUS,
+    //     RPM_MIN_VALUE, RPM_MAX_VALUE);
     SemiMeter fuel = SemiMeter(
         sf::Vector2f(FUEL_X, FUEL_Y),
         sf::Vector2f(FUEL_WIDTH, FUEL_HEIGHT),
-        0, 100, " %");
+        FUEL_MIN_VALUE, FUEL_MAX_VALUE, " %");
     SemiMeter oil_pressure = SemiMeter(
         sf::Vector2f(OIL_X, OIL_Y),
         sf::Vector2f(OIL_WIDTH, OIL_HEIGHT),
-        0, 65, " PSI");
-    float speed = 0;
-    float rpmValue = 0;
-    float fuelValue = 0;
-    float oilValue = 0;
-    sf::Clock elapsed;
+        OIL_MIN_VALUE, OIL_MAX_VALUE, " PSI");
+    SemiMeter temperature = SemiMeter(
+        sf::Vector2f(TEMPERATURE_X, TEMPERATURE_Y),
+        sf::Vector2f(TEMPERATURE_WIDTH, TEMPERATURE_HEIGHT),
+        TEMPERATURE_MIN_VALUE, TEMPERATURE_MAX_VALUE, " °C");
+    sf::Clock deltaTime;
 };

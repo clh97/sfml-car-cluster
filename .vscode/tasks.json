@@ -11,6 +11,7 @@
                 "-Wall",
                 "-Wextra",
                 "-Wformat",
+                "-w",
                 "-fdiagnostics-color=always",
                 "-I/opt/homebrew/include",
                 "-I/usr/local/include",

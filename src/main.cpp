@@ -8,6 +8,7 @@
 #include "imgui-sfml/imgui-SFML.cpp"
 
 #include "font.hpp"
+#include "config_ui/config_ui.cpp"
 #include "splash/splash.cpp"
 #include "cluster/cluster.cpp"
 
@@ -16,7 +17,7 @@ using namespace std;
 class Application
 {
 public:
-    Application()
+    Application() : config_ui(&this->cluster)
     {
         this->window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW_TITLE, WINDOW_STYLE);
 
@@ -38,6 +39,10 @@ public:
         {
             cout << "ImGui::SFML::Init failed" << endl;
         }
+
+        ImGui::GetIO().FontGlobalScale = WINDOW_RESOLUTION_FACTOR;
+
+        this->config_ui.init();
     }
 
     void run()
@@ -55,14 +60,11 @@ public:
             sf::Time deltaTime = this->deltaClock.restart();
 
             this->update(deltaTime);
-            ImGui::SFML::Update(this->window, deltaTime);
 
-            ImGui::Begin("Hello, world!");
-            ImGui::Button("Look at this pretty button");
-            ImGui::End();
+            this->config_ui.display();
+            this->window.display();
 
             this->render(this->window);
-            this->window.display();
         }
 
         ImGui::SFML::Shutdown();
@@ -73,6 +75,7 @@ private:
     sf::RectangleShape background;
     sf::Shader background_shader;
     sf::Clock deltaClock;
+    ConfigUi config_ui;
 
     Splash splash = Splash();
     Cluster cluster = Cluster();
@@ -93,16 +96,11 @@ private:
         ImGui::SFML::Render(this->window);
     }
 
-    void update(sf::Time elapsed)
+    void update(sf::Time deltaTime)
     {
-        // this->window.setTitle(string(WINDOW_TITLE) + " | FPS: " + to_string(1.0f / elapsed.asSeconds()));
-        // if (!this->splash.isDone())
-        // {
-        //     this->splash.update();
-        //     return;
-        // }
-
-        this->cluster.update(elapsed);
+        ImGui::SFML::Update(this->window, deltaTime);
+        this->config_ui.update(deltaTime);
+        this->cluster.update(deltaTime);
     };
 };
 

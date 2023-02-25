@@ -1,7 +1,7 @@
 #include "semi_meter.hpp"
 #include "effects/interpolate.hpp"
 
-void SemiMeter::update(sf::Time elapsed)
+void SemiMeter::update(sf::Time deltaTime)
 {
     m_ticks.clear();
     // m_ticks.reserve((int)max - (int)min);
