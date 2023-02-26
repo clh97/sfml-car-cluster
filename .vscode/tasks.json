@@ -4,16 +4,22 @@
         {
             "label": "Build",
             "type": "shell",
-            "command": "g++",
+            "command": "/usr/bin/g++",
             "args": [
                 "-std=c++17",
+                "-g",
+                "-Wall",
+                "-Wextra",
+                "-Wformat",
+                "-w",
+                "-fdiagnostics-color=always",
+                "-I/opt/homebrew/include",
                 "-I/usr/local/include",
-                "-I/opt/homebrew/Cellar/sfml/2.5.1_2/include",
-                "-I${workspaceFolder}/src",
-                "-c",
+                "-I/${workspaceFolder}/src",
                 "${workspaceFolder}/src/*.cpp",
+                "-c",
                 "-o",
-                "${workspaceFolder}/bin/main.o"
+                "${workspaceFolder}/bin/main.o",
             ],
             "group": {
                 "kind": "build",
@@ -26,14 +32,17 @@
             "command": "g++",
             "args": [
                 "${workspaceFolder}/bin/main.o",
+                "-L/opt/homebrew/lib",
+                "-L/usr/local/lib",
                 "-o",
                 "${workspaceFolder}/bin/main",
-                "-L/usr/local/lib",
-                "-L/opt/homebrew/lib",
-                "-L/opt/homebrew/Cellar/sfml/2.5.1_2/lib",
                 "-lsfml-graphics",
                 "-lsfml-window",
-                "-lsfml-system"
+                "-lsfml-system",
+                "-lsfml-audio",
+                "-lImGui-SFML",
+                "-framework",
+                "OpenGL"
             ],
             "dependsOn": "Build",
             "group": {

@@ -3,38 +3,35 @@
 
 Cluster::Cluster()
 {
-  this->elapsed.restart();
+    this->deltaTime.restart();
 }
 
 Cluster::~Cluster()
 {
 }
 
-void Cluster::update(sf::Time elapsed)
+void Cluster::update(sf::Time deltaTime)
 {
-  this->speedometer.update(elapsed);
-  this->rpm.update(elapsed);
+    this->speedometer.setValue(this->speedValue);
+    this->rpm.setValue(this->rpmValue);
+    this->fuel.setValue(this->fuelValue);
+    this->oil_pressure.setValue(this->oilValue);
+    this->temperature.setValue(this->temperatureValue);
 
-  this->speed += 1 * 0.25f;
-  this->rpmValue += 100 * 0.25f;
+    this->speedometer.update(deltaTime);
+    this->rpm.update(deltaTime);
+    this->fuel.update(deltaTime);
+    this->oil_pressure.update(deltaTime);
+    this->temperature.update(deltaTime);
 
-  if (this->speed > 200)
-  {
-    this->speed = 0;
-  }
-
-  if (this->rpmValue > 8000)
-  {
-    this->rpmValue = 0;
-  }
-
-  this->speedometer.setValue(this->speed);
-  this->rpm.setValue(this->rpmValue);
-  this->elapsed.restart();
+    this->deltaTime.restart();
 }
 
 void Cluster::draw(sf::RenderWindow &window)
 {
-  this->rpm.draw(window, sf::RenderStates::Default);
-  this->speedometer.draw(window, sf::RenderStates::Default);
+    this->speedometer.draw(window, sf::RenderStates::Default);
+    this->rpm.draw(window, sf::RenderStates::Default);
+    // this->fuel.draw(window, sf::RenderStates::Default);
+    // this->oil_pressure.draw(window, sf::RenderStates::Default);
+    // this->temperature.draw(window, sf::RenderStates::Default);
 }

@@ -64,6 +64,7 @@
     "variant": "cpp",
     "vector": "cpp",
     "algorithm": "cpp",
-    "__memory": "cpp"
+    "__memory": "cpp",
+    "cassert": "cpp"
   }
 }

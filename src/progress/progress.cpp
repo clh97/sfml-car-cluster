@@ -23,7 +23,7 @@ void Progress::draw(sf::RenderTarget &target, sf::RenderStates states) const
   target.draw(&m_vertexArray[0], m_vertexArray.getVertexCount(), sf::TrianglesFan);
 }
 
-void Progress::update(sf::Time elapsed)
+void Progress::update(sf::Time deltaTime)
 {
   float progress = this->value / (max - min) * -1.0f;
   float angle = progress * 245.0f;

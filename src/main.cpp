@@ -2,7 +2,13 @@
 #include <cmath>
 #include <random>
 
+#include <imgui.h>
+#include <imgui-SFML.h>
+
+#include "imgui-sfml/imgui-SFML.cpp"
+
 #include "font.hpp"
+#include "config_ui/config_ui.cpp"
 #include "splash/splash.cpp"
 #include "cluster/cluster.cpp"
 
@@ -11,10 +17,11 @@ using namespace std;
 class Application
 {
 public:
-    Application()
+    Application() : config_ui(&this->cluster)
     {
         this->window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW_TITLE, WINDOW_STYLE);
-        this->window.setFramerateLimit(APPLICATION_FPS);
+
+        this->window.setFramerateLimit(60);
 
         this->background.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
         this->background.setOrigin(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
@@ -26,34 +33,41 @@ public:
         this->background_shader.setUniform("innerColor", sf::Glsl::Vec4(1.0f, 1.0f, 1.0f, 1.0f));
         this->background_shader.setUniform("outerColor", sf::Glsl::Vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
-        this->deltaClock.restart();
-        this->elapsed.restart();
+        int initResult = ImGui::SFML::Init(this->window);
+
+        if (initResult == 0)
+        {
+            cout << "ImGui::SFML::Init failed" << endl;
+        }
+
+        ImGui::GetIO().FontGlobalScale = WINDOW_RESOLUTION_FACTOR;
+
+        this->config_ui.init();
     }
 
     void run()
     {
         while (this->window.isOpen())
         {
-            this->timeSinceLastUpdate += this->deltaClock.restart();
-
-            sf::Event Event;
-            while (this->window.pollEvent(Event))
+            sf::Event event;
+            while (this->window.pollEvent(event))
             {
-                if (Event.type == sf::Event::Closed || (Event.type == sf::Event::KeyPressed && Event.key.code == sf::Keyboard::Escape))
+                ImGui::SFML::ProcessEvent(this->window, event);
+                if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
                     this->window.close();
             }
 
-            sf::Time elapsed = this->deltaClock.getElapsedTime();
+            sf::Time deltaTime = this->deltaClock.restart();
 
-            while (this->timeSinceLastUpdate > this->timePerFrame)
-            {
-                this->timeSinceLastUpdate -= this->timePerFrame;
-                this->update(this->timePerFrame);
-            }
+            this->update(deltaTime);
+
+            this->config_ui.display();
+            this->window.display();
 
             this->render(this->window);
-            this->window.display();
         }
+
+        ImGui::SFML::Shutdown();
     }
 
 private:
@@ -61,9 +75,7 @@ private:
     sf::RectangleShape background;
     sf::Shader background_shader;
     sf::Clock deltaClock;
-    sf::Clock elapsed;
-    const sf::Time timePerFrame = sf::seconds(1.0f / APPLICATION_FPS);
-    sf::Time timeSinceLastUpdate = sf::Time::Zero;
+    ConfigUi config_ui;
 
     Splash splash = Splash();
     Cluster cluster = Cluster();
@@ -80,18 +92,15 @@ private:
 
         this->window.draw(this->background, &this->background_shader);
         this->cluster.draw(window);
+
+        ImGui::SFML::Render(this->window);
     }
 
-    void update(sf::Time elapsed)
+    void update(sf::Time deltaTime)
     {
-        this->window.setTitle(string(WINDOW_TITLE) + " | FPS: " + to_string(1.0f / elapsed.asSeconds()));
-        if (!this->splash.isDone())
-        {
-            this->splash.update();
-            return;
-        }
-
-        this->cluster.update(elapsed);
+        ImGui::SFML::Update(this->window, deltaTime);
+        this->config_ui.update(deltaTime);
+        this->cluster.update(deltaTime);
     };
 };
 
