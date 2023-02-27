@@ -71,5 +71,5 @@ target_link_libraries(InstrumentCluster fmt::fmt OpenGL::GL SDL2::SDL2 SDL2_imag
 if (APPLE)
     target_link_libraries(InstrumentCluster "-framework OpenGL")
 else()
-    target_link_libraries(InstrumentCluster GL)
+    target_link_libraries(InstrumentCluster GL dl)
 endif()
