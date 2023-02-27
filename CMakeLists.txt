@@ -12,7 +12,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(fmt)
 
-project(InstrumentCluster VERSION 0.1.0 LANGUAGES CXX C)
+project(MyApp VERSION 0.1.0 LANGUAGES CXX C)
 
 set(CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
@@ -33,8 +33,7 @@ include(GNUInstallDirs)
 include_directories(/usr/local/include /opt/homebrew/include /opt/homebrew/Cellar/sdl2/2.26.3/include)
 
 # Add the library directories
-link_directories(/usr/local/lib /opt/homebrew/lib /opt/homebrew/Cellar/sdl2/2.26.3/lib)
-link_libraries(/usr/local/lib /opt/homebrew/Cellar/sdl2/2.26.3/lib)
+link_directories(/usr/local/lib /opt/homebrew/Cellar/sdl2/2.26.3/lib)
 
 # Add the include directories for Mac OS X
 if(APPLE)
@@ -56,14 +55,14 @@ find_package(OpenGL REQUIRED)
 find_package(PkgConfig REQUIRED)
 
 # Find SDL2 and SDL2_image
-pkg_check_modules(SDL2 REQUIRED IMPORTED_TARGET sdl2)
-pkg_check_modules(SDL2_image REQUIRED IMPORTED_TARGET sdl2_image)
+pkg_check_modules(SDL2 IMPORTED_TARGET sdl2)
+pkg_check_modules(SDL2_image IMPORTED_TARGET sdl2_image)
 
 include_directories(${SDL2_INCLUDE_DIRS})
 link_directories(${SDL2_LIBRARY_DIRS})
 
 # Add executable for the application
-add_executable(InstrumentCluster
+add_executable(MyApp
     ${SOURCE_CPP}
     ${SOURCE_HEADER}
     src/imgui/imgui.cpp
@@ -76,9 +75,9 @@ add_executable(InstrumentCluster
 )
 
 # Link libraries
-target_link_libraries(InstrumentCluster fmt::fmt OpenGL::GL ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
+target_link_libraries(MyApp fmt::fmt OpenGL::GL ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
 
 # Apple specific libraries
 if (APPLE)
-    target_link_libraries(InstrumentCluster "-framework OpenGL")
+    target_link_libraries(MyApp "-framework OpenGL")
 endif()
