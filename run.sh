@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# THIS SCRIPT IS USED BY THE RASPBERRY PI TO RUN THE PROGRAM
+
 pushd /home/chimas/sfml-car-cluster
 
 # Compile the program
@@ -9,7 +11,7 @@ pushd build
 make
 
 # Run the program
-./build/InstrumentCluster
+./InstrumentCluster
 
 popd
 popd
