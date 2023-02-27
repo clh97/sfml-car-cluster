@@ -12,7 +12,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(fmt)
 
-project(MyApp VERSION 0.1.0 LANGUAGES CXX C)
+project(InstrumentCluster VERSION 0.1.0 LANGUAGES CXX C)
 
 set(CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
@@ -51,18 +51,11 @@ find_package(fmt REQUIRED)
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 
-# Find PkgConfig
-find_package(PkgConfig REQUIRED)
-
-# Find SDL2 and SDL2_image
-pkg_check_modules(SDL2 IMPORTED_TARGET sdl2)
-pkg_check_modules(SDL2_image IMPORTED_TARGET sdl2_image)
-
 include_directories(${SDL2_INCLUDE_DIRS})
 link_directories(${SDL2_LIBRARY_DIRS})
 
 # Add executable for the application
-add_executable(MyApp
+add_executable(InstrumentCluster
     ${SOURCE_CPP}
     ${SOURCE_HEADER}
     src/imgui/imgui.cpp
@@ -75,9 +68,11 @@ add_executable(MyApp
 )
 
 # Link libraries
-target_link_libraries(MyApp fmt::fmt OpenGL::GL ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
+target_link_libraries(InstrumentCluster fmt::fmt OpenGL::GL SDL2::SDL2 SDL2_image::SDL2_image)
 
 # Apple specific libraries
 if (APPLE)
-    target_link_libraries(MyApp "-framework OpenGL")
+    target_link_libraries(InstrumentCluster "-framework OpenGL")
+    else()
+    target_link_libraries(InstrumentCluster GL dl)
 endif()
