@@ -28,26 +28,13 @@ file(GLOB SOURCE_HEADER
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp
 )
 
-# Add executable for the application
-add_executable(InstrumentCluster
-    ${SOURCE_CPP}
-    ${SOURCE_HEADER}
-    src/imgui/imgui.cpp
-    src/imgui/imgui_draw.cpp
-    src/imgui/imgui_demo.cpp
-    src/imgui/imgui_tables.cpp
-    src/imgui/imgui_widgets.cpp
-    src/imgui/imgui_impl_sdl2.cpp
-    src/imgui/imgui_impl_opengl3.cpp
-)
-
 # Add the include directories for Unix systems
 include(GNUInstallDirs)
 include_directories(/usr/local/include /opt/homebrew/include /opt/homebrew/Cellar/sdl2/2.26.3/include)
 
 # Add the library directories
 link_directories(/usr/local/lib /opt/homebrew/lib /opt/homebrew/Cellar/sdl2/2.26.3/lib)
-link_libraries(/usr/local/lib /opt/homebrew/lib /opt/homebrew/Cellar/sdl2/2.26.3/lib)
+link_libraries(/usr/local/lib /opt/homebrew/Cellar/sdl2/2.26.3/lib)
 
 # Add the include directories for Mac OS X
 if(APPLE)
@@ -65,11 +52,33 @@ find_package(fmt REQUIRED)
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 
-# Link the executable against the necessary libraries (SDL2, SDL2_image, fmt)¡
-target_link_libraries(InstrumentCluster fmt::fmt OpenGL::GL SDL2::SDL2 SDL2_image::SDL2_image)
+# Find PkgConfig
+find_package(PkgConfig REQUIRED)
 
+# Find SDL2 and SDL2_image
+pkg_check_modules(SDL2 REQUIRED IMPORTED_TARGET sdl2)
+pkg_check_modules(SDL2_image REQUIRED IMPORTED_TARGET sdl2_image)
+
+include_directories(${SDL2_INCLUDE_DIRS})
+link_directories(${SDL2_LIBRARY_DIRS})
+
+# Add executable for the application
+add_executable(InstrumentCluster
+    ${SOURCE_CPP}
+    ${SOURCE_HEADER}
+    src/imgui/imgui.cpp
+    src/imgui/imgui_draw.cpp
+    src/imgui/imgui_demo.cpp
+    src/imgui/imgui_tables.cpp
+    src/imgui/imgui_widgets.cpp
+    src/imgui/imgui_impl_sdl2.cpp
+    src/imgui/imgui_impl_opengl3.cpp
+)
+
+# Link libraries
+target_link_libraries(InstrumentCluster fmt::fmt OpenGL::GL ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
+
+# Apple specific libraries
 if (APPLE)
     target_link_libraries(InstrumentCluster "-framework OpenGL")
-else()
-    target_link_libraries(InstrumentCluster GL dl `pkg-config --cflags --libs sdl2`)
 endif()
