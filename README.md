@@ -1,5 +1,6 @@
+# Instrument cluster using SDL2
 
-TODO: 
+TODO:
 
 * text render class for entire application
   * responsible for rendering text on the application with multiple fonts,

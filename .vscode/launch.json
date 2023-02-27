@@ -1,18 +1,18 @@
 {
-  "configurations": [
-    {
-      "name": "C/C++: clang++ build and debug active file",
-      "type": "cppdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/bin/main",
-      "args": [],
-      "stopAtEntry": false,
-      "cwd": "${workspaceFolder}/src",
-      "environment": [],
-      "externalConsole": true,
-      "MIMode": "lldb",
-      "preLaunchTask": "Link"
-    }
-  ],
-  "version": "2.0.0"
+    "version": "2.0.0",
+    "configurations": [
+        {
+            "name": "Debug CMake Application",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/InstrumentCluster",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build CMake Application",
+        }
+    ]
 }

@@ -1,8 +1,12 @@
 #!/bin/bash
 
-pushd /home/chimas/sfml-car-cluster/src
+pushd /home/chimas/sfml-car-cluster
 
-../bin/main
-	
+# Compile the program
+./compile.sh
+
+# Run the program
+./build/InstrumentCluster
+
 popd
 

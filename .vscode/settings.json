@@ -65,6 +65,13 @@
     "vector": "cpp",
     "algorithm": "cpp",
     "__memory": "cpp",
-    "cassert": "cpp"
+    "cassert": "cpp",
+    "bit": "cpp",
+    "cfenv": "cpp",
+    "deque": "cpp",
+    "iomanip": "cpp",
+    "stack": "cpp",
+    "strstream": "cpp",
+    "format": "cpp"
   }
 }
