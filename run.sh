@@ -2,11 +2,9 @@
 
 # THIS SCRIPT IS USED BY THE RASPBERRY PI TO RUN THE PROGRAM
 
-pushd /home/chimas/sfml-car-cluster/build
+cd /home/chimas/sfml-car-cluster/build
 
-make
+make -j4
 
 # Run the program
 ./InstrumentCluster
-
-popd

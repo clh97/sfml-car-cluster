@@ -12,26 +12,6 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(fmt)
 
-# Add the SDL2 library as a dependency
-FetchContent_Declare(
-    SDL2
-    GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-    GIT_TAG        SDL2
-    GIT_PROGRESS   TRUE
-)
-
-FetchContent_MakeAvailable(SDL2)
-
-# Add the SDL2_image library as a dependency
-FetchContent_Declare(
-    SDL2_image
-    GIT_REPOSITORY  https://github.com/libsdl-org/SDL_image
-    GIT_TAG         SDL2
-    GIT_PROGRESS    TRUE
-)
-
-FetchContent_MakeAvailable(SDL2_image)
-
 project(InstrumentCluster VERSION 0.1.0 LANGUAGES CXX C)
 
 set(CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
@@ -62,8 +42,12 @@ add_executable(InstrumentCluster
 )
 
 # Add the include directories for Unix systems
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} /usr/local/include /usr/local/include/SDL2 /usr/local/include/glad /usr/local/include/imgui)
 include(GNUInstallDirs)
+include_directories(/usr/local/include /opt/homebrew/include /opt/homebrew/Cellar/sdl2/2.26.3/include)
+
+# Add the library directories
+link_directories(/usr/local/lib /opt/homebrew/lib /opt/homebrew/Cellar/sdl2/2.26.3/lib)
+link_libraries(/usr/local/lib /opt/homebrew/lib /opt/homebrew/Cellar/sdl2/2.26.3/lib)
 
 # Add the include directories for Mac OS X
 if(APPLE)
@@ -72,18 +56,20 @@ if(APPLE)
 endif()
 
 # Find the SDL2 library
-# find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 
 # Find the fmt library
 find_package(fmt REQUIRED)
 
-# Link the executable against the necessary libraries (SDL2, SDL2_image, fmt, glad)
-target_link_libraries(InstrumentCluster PRIVATE SDL2 SDL2main SDL2_image fmt::fmt dl)
+# Find OpenGL
+find_package(OpenGL REQUIRED)
+
+# Link the executable against the necessary libraries (SDL2, SDL2_image, fmt)¡
+target_link_libraries(InstrumentCluster fmt::fmt OpenGL::GL SDL2::SDL2 SDL2_image::SDL2_image)
 
 if (APPLE)
-    target_link_libraries(InstrumentCluster PRIVATE "-framework OpenGL")
+    target_link_libraries(InstrumentCluster "-framework OpenGL")
 else()
-    target_link_libraries(InstrumentCluster PRIVATE GL)
+    target_link_libraries(InstrumentCluster GL)
 endif()
