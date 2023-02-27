@@ -80,4 +80,10 @@ find_package(SDL2_image REQUIRED)
 find_package(fmt REQUIRED)
 
 # Link the executable against the necessary libraries (SDL2, SDL2_image, fmt, glad)
-target_link_libraries(InstrumentCluster PRIVATE SDL2 SDL2main SDL2_image fmt::fmt dl "-framework OpenGL")
+target_link_libraries(InstrumentCluster PRIVATE SDL2 SDL2main SDL2_image fmt::fmt dl)
+
+if (APPLE)
+    target_link_libraries(InstrumentCluster PRIVATE "-framework OpenGL")
+else()
+    target_link_libraries(InstrumentCluster PRIVATE GL)
+endif()
