@@ -6,6 +6,7 @@
                 "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/**",
                 "${workspaceFolder}/src/**",
                 "/opt/homebrew/include",
+                "/opt/homebrew/Cellar/fmt/9.1.0/include"
             ],
             "defines": [],
             "macFrameworkPath": [
@@ -14,7 +15,9 @@
             "compilerPath": "/usr/bin/clang",
             "compileCommands": "${workspaceFolder}/build/compile_commands.json",
             "intelliSenseMode": "macos-clang-arm64",
-            "configurationProvider": "ms-vscode.cmake-tools"
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "cStandard": "c11",
+            "cppStandard": "c++11"
         }
     ],
     "version": 4
