@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 
-#include "application.cpp"
+#include "application.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -11,9 +11,9 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-
     std::unique_ptr<PlatformAdapter> adapter = std::make_unique<OpenGLAdapter>();
-    Application app(std::move(adapter), "Hello World", 1920, 550);
+
+    ImGuiApplication app(std::move(adapter), "SDL Instrument Cluster", 1920, 550);
 
     app.Run();
 

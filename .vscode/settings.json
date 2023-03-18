@@ -72,6 +72,13 @@
     "iomanip": "cpp",
     "stack": "cpp",
     "strstream": "cpp",
-    "format": "cpp"
+    "format": "cpp",
+    "__std_stream": "cpp",
+    "any": "cpp",
+    "fstream": "cpp",
+    "list": "cpp",
+    "queue": "cpp",
+    "set": "cpp",
+    "typeindex": "cpp"
   }
 }
