@@ -39,6 +39,11 @@ ImGuiApplication::ImGuiApplication(std::unique_ptr<PlatformAdapter> adapter, con
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
 
+    ImFontConfig config;
+    config.SizePixels = 24.0f;
+    ImFont *small = io.Fonts->AddFontFromFileTTF("../src/assets/OpenSans-Light.ttf", 24.0f, &config);
+
+    // io.FontDefault = small;
     io.DisplaySize.x = width;
     io.DisplaySize.y = height;
     io.WantSaveIniSettings = false;
@@ -116,7 +121,7 @@ void ImGuiApplication::Render()
 
     /* Speedometer gauge */
     ClusterData::Speedometer speedometer_data = {
-        .range = {0, 220},
+        .range = {0, 250},
         .format = "{} km/h",
         .kmh_speed = static_cast<int>(total_elapsed_time * 10.f), // ECU info
         .gauge = {
@@ -133,8 +138,8 @@ void ImGuiApplication::Render()
                 0.0f,
                 1.0f
             ),
-            .bg_color = ImVec4(0.0f, 0.0f, 0.0f, 0.5f),
-            .fg_color = ImVec4(0.0f, 0.7f, 0.0f, 1.0f),
+            .bg_color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f),
+            .fg_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f),
             .needle_color = ImVec4(1.0f, 0.0f, 0.0f, 1.0f),
             .text_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f),
             .num_ticks = 10,
@@ -143,6 +148,10 @@ void ImGuiApplication::Render()
             .angle_range = 270,
             .min_value = 0.0f,
             .max_value = 1.0f,
+            .range_limits = {
+                .min = speedometer_data.range.min,
+                .max = speedometer_data.range.max,
+            },
         }
     };
 
