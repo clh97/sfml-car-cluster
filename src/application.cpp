@@ -116,13 +116,16 @@ void ImGuiApplication::Render()
 
     /* Speedometer gauge */
     ClusterData::Speedometer speedometer_data = {
-        .range = { 0, 220 },
+        .range = {0, 220},
         .format = "{} km/h",
-        .label = fmt::format(speedometer_data.format, speedometer_data.kmh_speed),
         .kmh_speed = static_cast<int>(total_elapsed_time * 10.f), // ECU info
         .gauge = {
-            .radius = 150,
-            .pos = { window_size.x / 2.0f, window_size.y / 2.0f },
+            .label = fmt::format(speedometer_data.format, speedometer_data.kmh_speed).c_str(),
+            .center = {
+                static_cast<float>(window_size.x / 2),
+                static_cast<float>(window_size.y / 2),
+            },
+            .radius = 200,
             .value = Interpolation::map_range(
                 static_cast<float>(speedometer_data.kmh_speed),
                 static_cast<float>(speedometer_data.range.min),
@@ -130,12 +133,22 @@ void ImGuiApplication::Render()
                 0.0f,
                 1.0f
             ),
+            .bg_color = ImVec4(0.0f, 0.0f, 0.0f, 0.5f),
+            .fg_color = ImVec4(0.0f, 0.7f, 0.0f, 1.0f),
+            .needle_color = ImVec4(1.0f, 0.0f, 0.0f, 1.0f),
+            .text_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f),
+            .num_ticks = 10,
+            .start_angle = 135,
+            .end_angle = 45,
+            .angle_range = 270,
+            .min_value = 0.0f,
+            .max_value = 1.0f,
         }
     };
 
     fmt::print("{} km/h ; {:.1f} %\n", speedometer_data.kmh_speed, speedometer_data.gauge.value);
 
-    DrawCircularGauge(speedometer_data.gauge.pos, speedometer_data.gauge.radius, speedometer_data.gauge.value, speedometer_data.label.c_str());
+    DrawCircularGauge(speedometer_data.gauge);
 
     // ImGui::ShowDemoWindow();
 
