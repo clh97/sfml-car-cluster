@@ -102,7 +102,7 @@ static void DrawCircularGauge(CircularGauge &gauge)
     if (gauge.label)
     {
         ImVec2 label_size = ImGui::CalcTextSize(gauge.label);
-        ImVec2 label_pos = ImVec2(gauge.center.x - label_size.x / 2.0f, gauge.center.y - label_size.y / 2.0f);
+        ImVec2 label_pos = ImVec2(gauge.center.x - label_size.x / 2.0f, gauge.center.y + gauge.radius * 0.8f + label_size.y / 2.0f);
         ImGui::SetCursorScreenPos(label_pos);
         ImGui::TextColored(gauge.text_color, "%s", gauge.label);
     }
