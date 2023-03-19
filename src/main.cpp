@@ -1,13 +1,11 @@
-#include <iostream>
-#include <memory>
-
+#include "headers.hpp"
 #include "application.hpp"
 
 int main(int argc, char *argv[])
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+        fmt::print("SDL could not initialize! SDL_Error: {}\n", SDL_GetError());
         return 1;
     }
 

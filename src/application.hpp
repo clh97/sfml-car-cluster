@@ -1,7 +1,7 @@
-#pragma once
-#include <cmath>
-
+#include "headers.hpp"
+#include "constants.hpp"
 #include "platform.hpp"
+#include "cluster_data.hpp"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_opengl3.h"
@@ -22,6 +22,16 @@ public:
     virtual void Update() = 0;
 
     virtual void Render() = 0;
+
+protected:
+    bool is_running = false;
+    float last_frame_time = 0.0f;
+    float current_frame_time = 0.0f;
+    float delta_time = 0.0f;
+    float last_delta_time = 0.0f;
+    float total_elapsed_time = 0.0f;
+    float fps = 0.0f;
+    int frame_count = 0;
 };
 
 class ImGuiApplication : public Application
@@ -35,4 +45,7 @@ public:
     void Update() override;
 
     void Render() override;
+
+private:
+    ClusterData cluster_data;
 };

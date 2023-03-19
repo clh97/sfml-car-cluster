@@ -1,8 +1,7 @@
 #include "application.hpp"
 
+#include "interpolation.cpp"
 #include "imgui/components/circular_gauge.cpp"
-
-#include <iostream>
 
 Application::Application(std::unique_ptr<PlatformAdapter> adapter, const char *title, int width, int height)
     : m_adapter(std::move(adapter))
@@ -14,13 +13,18 @@ Application::Application(std::unique_ptr<PlatformAdapter> adapter, const char *t
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+    SDL_GL_SetSwapInterval(-1);
 
     m_adapter->SetCurrentContext(m_window);
     SDL_GL_CreateContext(m_window);
 
     glViewport(0, 0, width, height);
 
-    std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
+    // fmt::print("OpenGL version: {}\n", glGetString(GL_VERSION));
+    // fmt::print("GLSL version: {}\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+    // fmt::print("Vendor: {}\n", glGetString(GL_VENDOR));
+    // fmt::print("Renderer: {}\n", glGetString(GL_RENDERER));
 }
 
 Application::~Application()
@@ -43,6 +47,8 @@ ImGuiApplication::ImGuiApplication(std::unique_ptr<PlatformAdapter> adapter, con
 
     ImGui_ImplSDL2_InitForOpenGL(m_window, SDL_GL_GetCurrentContext());
     ImGui_ImplOpenGL3_Init("#version 330");
+
+    delta_time = 0.0f;
 }
 
 ImGuiApplication::~ImGuiApplication()
@@ -54,7 +60,10 @@ ImGuiApplication::~ImGuiApplication()
 
 void ImGuiApplication::Run()
 {
-    bool is_running = true;
+    is_running = true;
+
+    last_frame_time = SDL_GetTicks() / 1000.0f;
+
     while (is_running)
     {
         SDL_Event event;
@@ -67,10 +76,19 @@ void ImGuiApplication::Run()
             }
         }
 
+        current_frame_time = SDL_GetTicks() / 1000.0f;
+        delta_time = current_frame_time - last_frame_time;
+        fps = 1.0f / delta_time;
+        last_delta_time = delta_time;
+        last_frame_time = current_frame_time;
+        frame_count++;
+
         Update();
         Render();
 
+        SDL_Delay(1000 / MAX_FPS);
         m_adapter->SwapBuffers(m_window);
+        total_elapsed_time += delta_time;
     }
 }
 
@@ -87,13 +105,37 @@ void ImGuiApplication::Render()
     glClear(GL_COLOR_BUFFER_BIT);
 
     bool is_open = true;
-    ImGui::Begin("Gauge", &is_open, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoNav);
+    ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoNav;
+    ImGui::Begin("Gauge", &is_open, flags);
 
     SDL_Point window_size = m_adapter->GetWindowSize(m_window);
 
     ImGui::SetWindowSize(ImVec2(window_size.x, window_size.y));
 
-    DrawCircularGauge(ImVec2(200, 200), 100, 0.5f, 0.0f, 1.0f);
+    /* Instrument cluster components */
+
+    /* Speedometer gauge */
+    ClusterData::Speedometer speedometer_data = {
+        .range = { 0, 220 },
+        .format = "{} km/h",
+        .label = fmt::format(speedometer_data.format, speedometer_data.kmh_speed),
+        .kmh_speed = static_cast<int>(total_elapsed_time * 10.f), // ECU info
+        .gauge = {
+            .radius = 150,
+            .pos = { window_size.x / 2.0f, window_size.y / 2.0f },
+            .value = Interpolation::map_range(
+                static_cast<float>(speedometer_data.kmh_speed),
+                static_cast<float>(speedometer_data.range.min),
+                static_cast<float>(speedometer_data.range.max),
+                0.0f,
+                1.0f
+            ),
+        }
+    };
+
+    fmt::print("{} km/h ; {:.1f} %\n", speedometer_data.kmh_speed, speedometer_data.gauge.value);
+
+    DrawCircularGauge(speedometer_data.gauge.pos, speedometer_data.gauge.radius, speedometer_data.gauge.value, speedometer_data.label.c_str());
 
     // ImGui::ShowDemoWindow();
 

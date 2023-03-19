@@ -4,7 +4,7 @@
 
 #include "../imgui.h"
 
-void DrawCircularGauge(const ImVec2 &center, float radius, float value, float minValue, float maxValue)
+void DrawCircularGauge(const ImVec2 &center, float radius, float value, const char *label = nullptr)
     {
         ImDrawList *draw_list = ImGui::GetWindowDrawList();
         ImVec4 bg_color = ImVec4(0.0f, 0.0f, 0.0f, 0.5f);
@@ -15,6 +15,8 @@ void DrawCircularGauge(const ImVec2 &center, float radius, float value, float mi
         float start_angle = 135.0f;
         float end_angle = -135.0f;
         float angle_range = end_angle - start_angle;
+        float min_value = 0.0f;
+        float max_value = 1.0f;
 
         // Draw background circle
         draw_list->AddCircle(center, radius, ImGui::ColorConvertFloat4ToU32(bg_color), 100);
@@ -29,13 +31,16 @@ void DrawCircularGauge(const ImVec2 &center, float radius, float value, float mi
         }
 
         // Draw needle
-        float value_angle = start_angle + angle_range * ((value - minValue) / (maxValue - minValue));
+        float value_angle = start_angle + angle_range * ((value - min_value) / (max_value - min_value));
         ImVec2 needle_end = ImVec2(center.x + (radius - 20) * cosf(value_angle * M_PI / 180.0f), center.y + (radius - 20) * sinf(value_angle * M_PI / 180.0f));
         draw_list->AddLine(center, needle_end, ImGui::ColorConvertFloat4ToU32(needle_color), 4.0f);
 
-        // Draw value text
-        ImVec2 text_pos = ImVec2(center.x - 15, center.y + radius + 10);
-        char value_text[16];
-        snprintf(value_text, sizeof(value_text), "%.0f", value);
-        draw_list->AddText(text_pos, ImGui::ColorConvertFloat4ToU32(text_color), value_text);
+        // Draw label
+        if (label)
+        {
+            ImVec2 label_size = ImGui::CalcTextSize(label);
+            ImVec2 label_pos = ImVec2(center.x - label_size.x / 2.0f, center.y - label_size.y / 2.0f);
+            ImGui::SetCursorScreenPos(label_pos);
+            ImGui::TextColored(text_color, "%s", label);
+        }
     }
