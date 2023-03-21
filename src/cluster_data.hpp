@@ -11,7 +11,7 @@ public:
     struct Speedometer
     {
         // Represents the current speed of the car
-        int kmh_speed = 0;
+        float kmh_speed = 0;
 
         // Format string to use when displaying the label
         std::string format = "{} km/h";
@@ -25,6 +25,19 @@ public:
 
         CircularGauge gauge;
     } speedometer;
+
+    struct RPM
+    {
+        float rpm = 0;
+        std::string format = "{} RPM";
+
+        struct {
+            int min;
+            int max;
+        } range;
+
+        CircularGauge gauge;
+    } rpm;
 
     ClusterData() : speedometer{} {}
 };

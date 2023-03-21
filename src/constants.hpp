@@ -11,7 +11,7 @@
 #define WINDOW_HEIGHT 550 * WINDOW_RESOLUTION_FACTOR
 #define WINDOW_STYLE sf::Style::Default
 
-#define MAX_FPS 60
+#define MAX_FPS 144
 
 #define FORD_LOGO_PATH "assets/ford.png"
 #define FONT_PATH "assets/OpenSans-Light.ttf"

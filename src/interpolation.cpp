@@ -4,9 +4,10 @@
 class Interpolation
 {
 public:
-    static float linear(float time, float start_value, float change, float duration)
+    template<typename T, typename U>
+    static constexpr T linear(T const& x, T const& y, U const& a)
     {
-        return change * time / duration + start_value;
+        return static_cast<T>(x * (U(1) - a) + y * a);
     }
 
     static float map_range(float value, float input_min, float input_max, float output_min, float output_max)

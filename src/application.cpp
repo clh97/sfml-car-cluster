@@ -41,7 +41,7 @@ ImGuiApplication::ImGuiApplication(std::unique_ptr<PlatformAdapter> adapter, con
 
     ImFontConfig config;
     config.SizePixels = 24.0f;
-    ImFont *small = io.Fonts->AddFontFromFileTTF("../src/assets/OpenSans-Light.ttf", 24.0f, &config);
+    ImFont *small = io.Fonts->AddFontFromFileTTF("../src/assets/OpenSans-Medium.ttf", 24.0f, &config);
 
     // io.FontDefault = small;
     io.DisplaySize.x = width;
@@ -120,15 +120,15 @@ void ImGuiApplication::Render()
     /* Instrument cluster components */
 
     /* Speedometer gauge */
-    ClusterData::Speedometer speedometer_data = {
-        .range = {0, 250},
+    ClusterData::Speedometer speedometer_data = ClusterData::Speedometer{
+        .range = {0, 280},
         .format = "{} km/h",
-        .kmh_speed = static_cast<int>(total_elapsed_time * 10.f), // ECU info
+        .kmh_speed = (total_elapsed_time * 10.f), // ECU info
         .gauge = {
-            .label = fmt::format(speedometer_data.format, speedometer_data.kmh_speed).c_str(),
+            .label = fmt::format(speedometer_data.format, static_cast<int>(speedometer_data.kmh_speed)),
             .center = {
-                static_cast<float>(window_size.x / 2),
-                static_cast<float>(window_size.y / 2),
+                static_cast<float>(window_size.x * 0.66),
+                static_cast<float>(window_size.y * 0.5),
             },
             .radius = 200,
             .value = Interpolation::map_range(
@@ -142,7 +142,7 @@ void ImGuiApplication::Render()
             .fg_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f),
             .needle_color = ImVec4(1.0f, 0.0f, 0.0f, 1.0f),
             .text_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f),
-            .num_ticks = 10,
+            .num_ticks = 14,
             .start_angle = 135,
             .end_angle = 45,
             .angle_range = 270,
@@ -152,12 +152,52 @@ void ImGuiApplication::Render()
                 .min = speedometer_data.range.min,
                 .max = speedometer_data.range.max,
             },
+            .red_zone = true,
+        }
+    };
+
+    /* RPM gauge */
+    ClusterData::RPM rpm_data = ClusterData::RPM{
+        .range = {0, 8000},
+        .format = "{} RPM",
+        .rpm = total_elapsed_time * 100.f, // ECU info
+        .gauge = {
+            .label = fmt::format(rpm_data.format, static_cast<int>(rpm_data.rpm)),
+            .center = {
+                static_cast<float>(window_size.x * 0.33),
+                static_cast<float>(window_size.y * 0.5),
+            },
+            .radius = 200,
+            .value = Interpolation::map_range(
+                static_cast<float>(rpm_data.rpm),
+                static_cast<float>(rpm_data.range.min),
+                static_cast<float>(rpm_data.range.max),
+                0.0f,
+                1.0f
+            ),
+            .bg_color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f),
+            .fg_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f),
+            .needle_color = ImVec4(1.0f, 0.0f, 0.0f, 1.0f),
+            .text_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f),
+            .num_ticks = 8,
+            .start_angle = 135,
+            .end_angle = 45,
+            .angle_range = 270,
+            .min_value = 0.0f,
+            .max_value = 1.0f,
+            .range_limits = {
+                .min = rpm_data.range.min,
+                .max = rpm_data.range.max,
+            },
+            .red_zone = true,
         }
     };
 
     fmt::print("{} km/h ; {:.1f} %\n", speedometer_data.kmh_speed, speedometer_data.gauge.value);
 
-    DrawCircularGauge(speedometer_data.gauge);
+    DrawCircularGauge(&speedometer_data.gauge, this->delta_time);
+
+    DrawCircularGauge(&rpm_data.gauge, this->delta_time);
 
     // ImGui::ShowDemoWindow();
 
