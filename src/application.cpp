@@ -127,10 +127,10 @@ void ImGuiApplication::Render()
         .gauge = {
             .label = fmt::format(speedometer_data.format, static_cast<int>(speedometer_data.kmh_speed)),
             .center = {
-                static_cast<float>(window_size.x * 0.66),
+                static_cast<float>(window_size.x * 0.8),
                 static_cast<float>(window_size.y * 0.5),
             },
-            .radius = 200,
+            .radius = 235,
             .value = Interpolation::map_range(
                 static_cast<float>(speedometer_data.kmh_speed),
                 static_cast<float>(speedometer_data.range.min),
@@ -153,6 +153,7 @@ void ImGuiApplication::Render()
                 .max = speedometer_data.range.max,
             },
             .red_zone = true,
+            .red_zone_start_percent = 0.9f
         }
     };
 
@@ -164,10 +165,10 @@ void ImGuiApplication::Render()
         .gauge = {
             .label = fmt::format(rpm_data.format, static_cast<int>(rpm_data.rpm)),
             .center = {
-                static_cast<float>(window_size.x * 0.33),
+                static_cast<float>(window_size.x * 0.2),
                 static_cast<float>(window_size.y * 0.5),
             },
-            .radius = 200,
+            .radius = 235,
             .value = Interpolation::map_range(
                 static_cast<float>(rpm_data.rpm),
                 static_cast<float>(rpm_data.range.min),
@@ -190,6 +191,7 @@ void ImGuiApplication::Render()
                 .max = rpm_data.range.max,
             },
             .red_zone = true,
+            .red_zone_start_percent = 0.8f
         }
     };
 
