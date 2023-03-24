@@ -16,8 +16,8 @@ struct CircularGauge
     ImVec4 fg_color;
     ImVec4 needle_color;
     ImVec4 text_color;
-    bool red_zone;
-    float red_zone_start_percent;
+    bool hide_outline;
+    bool hide_bottom;
     int num_ticks;
     float start_angle;
     float end_angle;
@@ -29,10 +29,20 @@ struct CircularGauge
         int min;
         int max;
     } range_limits;
+    struct CriticalZone
+    {
+        bool enabled;
+        float start_percent;
+        ImVec4 color;
+    } critical_zone;
 };
 
 static void DrawCircularGauge(CircularGauge *gauge, float delta_time)
 {
+
+    int critical_zone_start_tick_idx = static_cast<int>(std::round(gauge->num_ticks * gauge->critical_zone.start_percent));
+    float critical_zone_start_angle = gauge->start_angle + (gauge->angle_range / gauge->num_ticks) * critical_zone_start_tick_idx;
+
     ImDrawList *draw_list = ImGui::GetWindowDrawList();
 
     if (gauge->value > gauge->max_value)
@@ -47,15 +57,11 @@ static void DrawCircularGauge(CircularGauge *gauge, float delta_time)
     // Draw background circle
     draw_list->AddCircleFilled(gauge->center, gauge->radius, ImGui::ColorConvertFloat4ToU32(gauge->bg_color), gauge->radius);
 
-    int red_zone_start_tick_idx = static_cast<int>(std::round(gauge->num_ticks * gauge->red_zone_start_percent));
-
-    float red_zone_start_angle = gauge->start_angle + (gauge->angle_range / gauge->num_ticks) * red_zone_start_tick_idx;
-
-    if (gauge->red_zone)
-    { // Draw outline circle composed by 256 lines
+    if (!gauge->hide_outline)
+    {
+        // Draw outline circle composed by 256 lines
         const int num_segments = 256;
         const float angle_step = gauge->angle_range / static_cast<float>(num_segments);
-
         for (int i = 0; i <= num_segments; ++i)
         {
             float angle = gauge->start_angle + angle_step * i;
@@ -65,35 +71,17 @@ static void DrawCircularGauge(CircularGauge *gauge, float delta_time)
             ImVec2 line_end = ImVec2(gauge->center.x + gauge->radius * cosf(angle_next * M_PI / 180.0f), gauge->center.y + gauge->radius * sinf(angle_next * M_PI / 180.0f));
             ImVec4 line_color = gauge->fg_color;
 
-            // If angle is greater than or equal to the start of the red zone, change color to red
-            if (angle >= red_zone_start_angle && gauge->red_zone)
+            if (angle >= critical_zone_start_angle && gauge->critical_zone.enabled)
             {
-                line_color = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
+                line_color = gauge->critical_zone.color;
             }
 
             draw_list->AddLine(
                 line_start,
                 line_end,
-                ImGui::ColorConvertFloat4ToU32(line_color)
-            );
+                ImGui::ColorConvertFloat4ToU32(line_color));
         }
     }
-    else
-    { // Draw simple outline circle
-        draw_list->AddCircle(gauge->center, gauge->radius, ImGui::ColorConvertFloat4ToU32(gauge->fg_color), gauge->radius);
-    }
-
-    // Hide bottom part of gauge
-    static const ImVec4 bottom_part = ImVec4(
-        gauge->center.x + gauge->radius * cosf(135.0f * M_PI / 180.0f),
-        gauge->center.y + gauge->radius,
-        gauge->center.x + gauge->radius * cosf(45.0f * M_PI / 180.0f),
-        gauge->center.y + gauge->radius * sinf(45.0f * M_PI / 180.0f));
-
-    draw_list->AddRectFilled(
-        ImVec2(bottom_part.x, bottom_part.y),
-        ImVec2(bottom_part.z, bottom_part.w),
-        ImGui::ColorConvertFloat4ToU32(gauge->bg_color));
 
     // Draw tick marks
     float tick_value_interval = (gauge->max_value - gauge->min_value) / 10;
@@ -103,9 +91,9 @@ static void DrawCircularGauge(CircularGauge *gauge, float delta_time)
         // Red zone
         ImVec4 tick_color = gauge->fg_color;
         float angle = gauge->start_angle + (gauge->angle_range / gauge->num_ticks) * i;
-        if (angle >= red_zone_start_angle && gauge->red_zone)
+        if (angle >= critical_zone_start_angle && gauge->critical_zone.enabled)
         {
-            tick_color = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
+            tick_color = gauge->critical_zone.color;
         }
 
         // Draw main ticks
@@ -146,7 +134,7 @@ static void DrawCircularGauge(CircularGauge *gauge, float delta_time)
     float needle_angle = gauge->start_angle + (gauge->angle_range / (gauge->max_value - gauge->min_value)) * (gauge->value - gauge->min_value);
     ImVec2 needle_start = ImVec2(gauge->center.x + gauge->radius / 4 * cosf(needle_angle * M_PI / 180.0f), gauge->center.y + gauge->radius / 4 * sinf(needle_angle * M_PI / 180.0f));
     ImVec2 needle_end = ImVec2(gauge->center.x + (gauge->radius - 20) * cosf(needle_angle * M_PI / 180.0f), gauge->center.y + (gauge->radius - 20) * sinf(needle_angle * M_PI / 180.0f));
-    draw_list->AddLine(needle_start, needle_end, ImGui::ColorConvertFloat4ToU32(gauge->needle_color), 2.0f);
+    draw_list->AddLine(needle_start, needle_end, ImGui::ColorConvertFloat4ToU32(gauge->needle_color), 4.0f);
 
     // Draw label
     if (gauge->label.length() > 0)
@@ -158,5 +146,81 @@ static void DrawCircularGauge(CircularGauge *gauge, float delta_time)
 
         fmt::print("Label pos: {}, {} ; label_size {}, {} ; gauge_ptr {}\n", label_pos.x, label_pos.y, label_size.x, label_size.y, fmt::ptr(&gauge));
         draw_list->AddText(label_pos, ImGui::ColorConvertFloat4ToU32(gauge->text_color), gauge->label.c_str());
+    }
+}
+
+static void DrawCircularGaugeEditor(CircularGauge& gauge, bool is_open, std::string title)
+{
+    ImGui::SetNextWindowSize(ImVec2(400, 400), ImGuiCond_FirstUseEver);
+
+    if (is_open)
+    {
+        ImGui::Begin(std::string("Circular Gauge Editor - " + title).c_str());
+        ImGui::Text("Center");
+        ImGui::DragFloat2("##Center", &gauge.center.x, 1.0f);
+
+        ImGui::Text("Radius");
+        ImGui::DragFloat("##Radius", &gauge.radius, 1.0f);
+
+        ImGui::Text("Value");
+        ImGui::DragFloat("##Value", &gauge.value, 0.01f);
+
+        ImGui::Text("Label");
+        static char label[256] = "";
+        strncpy(label, gauge.label.c_str(), sizeof(label));
+        if (ImGui::InputText("##Label", label, sizeof(label)))
+        {
+            gauge.label = label;
+        }
+
+        ImGui::Text("Background Color");
+        ImGui::ColorEdit4("##BGColor", (float*)&gauge.bg_color);
+
+        ImGui::Text("Foreground Color");
+        ImGui::ColorEdit4("##FGColor", (float*)&gauge.fg_color);
+
+        ImGui::Text("Needle Color");
+        ImGui::ColorEdit4("##NeedleColor", (float*)&gauge.needle_color);
+
+        ImGui::Text("Text Color");
+        ImGui::ColorEdit4("##TextColor", (float*)&gauge.text_color);
+
+        ImGui::Text("Hide Outline");
+        ImGui::Checkbox("##HideOutline", &gauge.hide_outline);
+
+        ImGui::Text("Hide Bottom");
+        ImGui::Checkbox("##HideBottom", &gauge.hide_bottom);
+
+        ImGui::Text("Number of Ticks");
+        ImGui::DragInt("##NumTicks", &gauge.num_ticks, 1.0f, 0, 100);
+
+        ImGui::Text("Start Angle");
+        ImGui::DragFloat("##StartAngle", &gauge.start_angle, 1.0f, -360.0f, 360.0f);
+
+        ImGui::Text("End Angle");
+        ImGui::DragFloat("##EndAngle", &gauge.end_angle, 1.0f, -360.0f, 360.0f);
+
+        ImGui::Text("Angle Range");
+        ImGui::DragFloat("##AngleRange", &gauge.angle_range, 1.0f, 0.0f, 360.0f);
+
+        ImGui::Text("Min Value");
+        ImGui::DragFloat("##MinValue", &gauge.min_value, 0.01f);
+
+        ImGui::Text("Max Value");
+        ImGui::DragFloat("##MaxValue", &gauge.max_value, 0.01f);
+
+        ImGui::Text("Range Limits");
+        ImGui::DragInt("##RangeLimitsMin", &gauge.range_limits.min, 1.0f);
+        ImGui::DragInt("##RangeLimitsMax", &gauge.range_limits.max, 1.0f);
+
+        ImGui::Text("Critical Zone");
+        ImGui::Checkbox("##CriticalZoneEnabled", &gauge.critical_zone.enabled);
+        ImGui::SameLine();
+        ImGui::Text("Enabled");
+        ImGui::DragFloat("##CriticalZoneStartPercent", &gauge.critical_zone.start_percent, 0.01f, 0.0f, 100.0f);
+        ImGui::SameLine();
+        ImGui::Text("Start Percent");
+        ImGui::ColorEdit4("##CriticalZoneColor", (float*)&gauge.critical_zone.color);
+        ImGui::End();
     }
 }

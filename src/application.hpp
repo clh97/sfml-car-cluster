@@ -1,8 +1,11 @@
+#include <string>
+
 #include "constants.hpp"
 #include "platform.hpp"
 #include "cluster_data.hpp"
 
 #include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_sdl2.h"
 

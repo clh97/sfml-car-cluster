@@ -21,7 +21,7 @@ Application::Application(std::unique_ptr<PlatformAdapter> adapter, const char *t
 
     glViewport(0, 0, width, height);
 
-    // fmt::print("OpenGL version: {}\n", glGetString(GL_VERSION));
+    // fmt::print("OpenGL version: {}\n", std::string(glGetString(GL_VERSION)));
     // fmt::print("GLSL version: {}\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
     // fmt::print("Vendor: {}\n", glGetString(GL_VENDOR));
     // fmt::print("Renderer: {}\n", glGetString(GL_RENDERER));
@@ -120,28 +120,24 @@ void ImGuiApplication::Render()
     /* Instrument cluster components */
 
     /* Speedometer gauge */
-    ClusterData::Speedometer speedometer_data = ClusterData::Speedometer{
+    static ClusterData::Speedometer speedometer_data = ClusterData::Speedometer{
         .range = {0, 280},
         .format = "{} km/h",
         .kmh_speed = (total_elapsed_time * 10.f), // ECU info
         .gauge = {
             .label = fmt::format(speedometer_data.format, static_cast<int>(speedometer_data.kmh_speed)),
             .center = {
-                static_cast<float>(window_size.x * 0.8),
+                static_cast<float>(window_size.x * 0.66),
                 static_cast<float>(window_size.y * 0.5),
             },
-            .radius = 235,
-            .value = Interpolation::map_range(
-                static_cast<float>(speedometer_data.kmh_speed),
-                static_cast<float>(speedometer_data.range.min),
-                static_cast<float>(speedometer_data.range.max),
-                0.0f,
-                1.0f
-            ),
-            .bg_color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f),
-            .fg_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f),
-            .needle_color = ImVec4(1.0f, 0.0f, 0.0f, 1.0f),
-            .text_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f),
+            .radius = 200,
+            .value = Interpolation::map_range(static_cast<float>(speedometer_data.kmh_speed), static_cast<float>(speedometer_data.range.min), static_cast<float>(speedometer_data.range.max), 0.0f, 1.0f),
+            .bg_color = THEME_COLOR_BLACK,
+            .fg_color = THEME_COLOR_WHITE,
+            .needle_color = THEME_COLOR_BLUE_1,
+            .text_color = THEME_COLOR_WHITE,
+            .hide_outline = false,
+            .hide_bottom = false,
             .num_ticks = 14,
             .start_angle = 135,
             .end_angle = 45,
@@ -152,13 +148,16 @@ void ImGuiApplication::Render()
                 .min = speedometer_data.range.min,
                 .max = speedometer_data.range.max,
             },
-            .red_zone = true,
-            .red_zone_start_percent = 0.9f
+            .critical_zone = {
+                .enabled = false,
+                .start_percent = 0.9f,
+                .color = THEME_COLOR_BLUE_1,
+            }
         }
     };
 
     /* RPM gauge */
-    ClusterData::RPM rpm_data = ClusterData::RPM{
+    static ClusterData::RPM rpm_data = ClusterData::RPM{
         .range = {0, 8000},
         .format = "{} RPM",
         .rpm = total_elapsed_time * 100.f, // ECU info
@@ -168,18 +167,14 @@ void ImGuiApplication::Render()
                 static_cast<float>(window_size.x * 0.2),
                 static_cast<float>(window_size.y * 0.5),
             },
-            .radius = 235,
-            .value = Interpolation::map_range(
-                static_cast<float>(rpm_data.rpm),
-                static_cast<float>(rpm_data.range.min),
-                static_cast<float>(rpm_data.range.max),
-                0.0f,
-                1.0f
-            ),
-            .bg_color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f),
-            .fg_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f),
-            .needle_color = ImVec4(1.0f, 0.0f, 0.0f, 1.0f),
-            .text_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f),
+            .radius = 200,
+            .value = Interpolation::map_range(static_cast<float>(rpm_data.rpm), static_cast<float>(rpm_data.range.min), static_cast<float>(rpm_data.range.max), 0.0f, 1.0f),
+            .bg_color = THEME_COLOR_BLACK,
+            .fg_color = THEME_COLOR_WHITE,
+            .needle_color = THEME_COLOR_BLUE_1,
+            .text_color = THEME_COLOR_WHITE,
+            .hide_outline = false,
+            .hide_bottom = true,
             .num_ticks = 8,
             .start_angle = 135,
             .end_angle = 45,
@@ -190,19 +185,34 @@ void ImGuiApplication::Render()
                 .min = rpm_data.range.min,
                 .max = rpm_data.range.max,
             },
-            .red_zone = true,
-            .red_zone_start_percent = 0.8f
+            .critical_zone = {
+                .enabled = true,
+                .start_percent = 0.8f,
+                .color = THEME_COLOR_BLUE_1,
+            }
         }
     };
 
-    fmt::print("{} km/h ; {:.1f} %\n", speedometer_data.kmh_speed, speedometer_data.gauge.value);
+    /* Cluster icons */
+    static ClusterData::HandBrake hand_brake = ClusterData::HandBrake{
 
+    };
+
+    /* Draw gauges */
     DrawCircularGauge(&speedometer_data.gauge, this->delta_time);
-
     DrawCircularGauge(&rpm_data.gauge, this->delta_time);
 
-    // ImGui::ShowDemoWindow();
+    /* Draw circular gauge editors */
+    static bool show_speedometer_editor = true;
+    DrawCircularGaugeEditor(speedometer_data.gauge, show_speedometer_editor, "Speedometer");
 
+    static bool show_rpm_editor = true;
+    DrawCircularGaugeEditor(rpm_data.gauge, show_rpm_editor, "RPM");
+
+    // Create SVG Renderer for icon
+    // ImGui::Image((void *)(intptr_t)texture, ImVec2(img_width, img_height), ImVec2(0, 1), ImVec2(1, 0));
+
+    // ImGui::ShowDemoWindow();
     ImGui::End();
 
     ImGui::Render();

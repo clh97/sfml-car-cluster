@@ -1,6 +1,25 @@
 #define CAR_CLUSTER_VERSION_MAJOR @CAR_CLUSTER_VERSION_MAJOR @
 #define CAR_CLUSTER_VERSION_MINOR @CAR_CLUSTER_VERSION_MINOR @
 
+/* COLORS*/
+#define THEME_COLOR_WHITE ImVec4(1.0f, 1.0f, 1.0f, 1.0f)
+#define THEME_COLOR_BLACK ImVec4(0.0f, 0.0f, 0.0f, 1.0f)
+#define THEME_COLOR_RED ImVec4(1.0f, 0.0f, 0.0f, 1.0f)
+#define THEME_COLOR_GREEN ImVec4(0.0f, 1.0f, 0.0f, 1.0f)
+#define THEME_COLOR_BLUE ImVec4(0.0f, 0.0f, 1.0f, 1.0f)
+#define THEME_COLOR_YELLOW ImVec4(1.0f, 1.0f, 0.0f, 1.0f)
+#define THEME_COLOR_PURPLE ImVec4(1.0f, 0.0f, 1.0f, 1.0f)
+#define THEME_COLOR_CYAN ImVec4(0.0f, 1.0f, 1.0f, 1.0f)
+#define THEME_COLOR_ORANGE ImVec4(1.0f, 0.5f, 0.0f, 1.0f)
+#define THEME_COLOR_GRAY ImVec4(0.5f, 0.5f, 0.5f, 1.0f)
+#define THEME_COLOR_DARK_GRAY ImVec4(0.25f, 0.25f, 0.25f, 1.0f)
+#define THEME_COLOR_LIGHT_GRAY ImVec4(0.75f, 0.75f, 0.75f, 1.0f)
+#define THEME_COLOR_TRANSPARENT ImVec4(0.0f, 0.0f, 0.0f, 0.0f)
+
+/* THEME COLORS */
+#define THEME_COLOR_BLUE_1 ImVec4(0.22f, 0.26f, 0.73f, 1.0f)
+
+
 #define SKIP_SPLASH true
 #define SPLASH_FADEIN_TIME 2.0f
 #define SPLASH_FADEOUT_TIME 1.15f

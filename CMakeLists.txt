@@ -1,17 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
 
-include(FetchContent)
-
-# Add the fmt library as a dependency
-FetchContent_Declare(
-    fmt
-    GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-    GIT_TAG        master
-    GIT_PROGRESS    TRUE
-)
-
-FetchContent_MakeAvailable(fmt)
-
 project(InstrumentCluster VERSION 0.1.0 LANGUAGES CXX C)
 
 # Set the C++ standard to C++17
@@ -61,6 +49,9 @@ find_package(fmt REQUIRED)
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 
+# Find NanoSVG
+find_package(NanoSVG REQUIRED)
+
 include_directories(${SDL2_INCLUDE_DIRS})
 link_directories(${SDL2_LIBRARY_DIRS})
 
@@ -77,8 +68,18 @@ add_executable(InstrumentCluster
     src/imgui/imgui_impl_opengl3.cpp
 )
 
+target_compile_options(InstrumentCluster PRIVATE -w)
+
+
 # Link libraries
-target_link_libraries(InstrumentCluster fmt::fmt OpenGL::GL SDL2::SDL2 SDL2_image::SDL2_image)
+target_link_libraries(InstrumentCluster
+    fmt::fmt
+    OpenGL::GL
+    SDL2::SDL2
+    SDL2_image::SDL2_image
+    NanoSVG::nanosvg
+    NanoSVG::nanosvgrast
+)
 
 # Apple specific libraries
 if (APPLE)

@@ -2,21 +2,17 @@
 #include <iostream>
 
 #include "imgui/imgui.h"
-
 #include "imgui/components/circular_gauge.cpp"
+#include "imgui/components/cluster_icon.cpp"
 
 class ClusterData
 {
 public:
     struct Speedometer
     {
-        // Represents the current speed of the car
         float kmh_speed = 0;
 
-        // Format string to use when displaying the label
         std::string format = "{} km/h";
-
-        // Represents the range of the gauge (in km/h)
         struct
         {
             int min;
@@ -39,5 +35,11 @@ public:
         CircularGauge gauge;
     } rpm;
 
-    ClusterData() : speedometer{} {}
+    struct HandBrake
+    {
+        bool engaged = false;
+        ClusterIcon icon;
+    } hand_brake;
+
+    // ClusterData() : rpm{}, speedometer{}, hand_brake{} {}
 };
