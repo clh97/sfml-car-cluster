@@ -39,7 +39,6 @@ struct CircularGauge
 
 static void DrawCircularGauge(CircularGauge *gauge, float delta_time)
 {
-
     int critical_zone_start_tick_idx = static_cast<int>(std::round(gauge->num_ticks * gauge->critical_zone.start_percent));
     float critical_zone_start_angle = gauge->start_angle + (gauge->angle_range / gauge->num_ticks) * critical_zone_start_tick_idx;
 
@@ -139,13 +138,12 @@ static void DrawCircularGauge(CircularGauge *gauge, float delta_time)
     // Draw label
     if (gauge->label.length() > 0)
     {
+        ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[3]);
         ImVec2 label_size = ImGui::CalcTextSize(gauge->label.c_str());
-        ImVec2 label_pos = ImVec2(gauge->center.x - label_size.x / 2.0f, gauge->center.y);
+        ImVec2 label_pos = ImVec2(gauge->center.x - label_size.x / 2.0f, gauge->center.y - label_size.y / 2.0f);
 
-        // draw_list->AddRectFilled(label_pos, ImVec2(label_pos.x + label_size.x, label_pos.y + label_size.y), ImGui::ColorConvertFloat4ToU32(gauge->fg_color));
-
-        fmt::print("Label pos: {}, {} ; label_size {}, {} ; gauge_ptr {}\n", label_pos.x, label_pos.y, label_size.x, label_size.y, fmt::ptr(&gauge));
         draw_list->AddText(label_pos, ImGui::ColorConvertFloat4ToU32(gauge->text_color), gauge->label.c_str());
+        ImGui::PopFont();
     }
 }
 

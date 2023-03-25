@@ -37,13 +37,15 @@ ImGuiApplication::ImGuiApplication(std::unique_ptr<PlatformAdapter> adapter, con
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+
     ImGuiIO &io = ImGui::GetIO();
 
     ImFontConfig config;
-    config.SizePixels = 24.0f;
-    ImFont *small = io.Fonts->AddFontFromFileTTF("../src/assets/OpenSans-Medium.ttf", 24.0f, &config);
-
-    // io.FontDefault = small;
+    // config.SizePixels = 24.0f;
+    io.Fonts->AddFontFromFileTTF("../src/assets/OpenSans-Medium.ttf", 14.0f, &config);
+    io.Fonts->AddFontFromFileTTF("../src/assets/OpenSans-Medium.ttf", 18.0f, &config);
+    io.Fonts->AddFontFromFileTTF("../src/assets/OpenSans-Medium.ttf", 24.0f, &config);
+    io.Fonts->AddFontFromFileTTF("../src/assets/OpenSans-Medium.ttf", 32.0f, &config);
     io.DisplaySize.x = width;
     io.DisplaySize.y = height;
     io.WantSaveIniSettings = false;
@@ -113,6 +115,8 @@ void ImGuiApplication::Render()
     ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoNav;
     ImGui::Begin("Gauge", &is_open, flags);
 
+    ImGui::SetWindowPos(ImVec2(0, 0));
+
     SDL_Point window_size = m_adapter->GetWindowSize(m_window);
 
     ImGui::SetWindowSize(ImVec2(window_size.x, window_size.y));
@@ -127,12 +131,12 @@ void ImGuiApplication::Render()
         .gauge = {
             .label = fmt::format(speedometer_data.format, static_cast<int>(speedometer_data.kmh_speed)),
             .center = {
-                static_cast<float>(window_size.x * 0.66),
+                static_cast<float>(window_size.x * 0.8),
                 static_cast<float>(window_size.y * 0.5),
             },
-            .radius = 200,
+            .radius = 250,
             .value = Interpolation::map_range(static_cast<float>(speedometer_data.kmh_speed), static_cast<float>(speedometer_data.range.min), static_cast<float>(speedometer_data.range.max), 0.0f, 1.0f),
-            .bg_color = THEME_COLOR_BLACK,
+            .bg_color = THEME_COLOR_TRANSPARENT,
             .fg_color = THEME_COLOR_WHITE,
             .needle_color = THEME_COLOR_BLUE_1,
             .text_color = THEME_COLOR_WHITE,
@@ -167,9 +171,9 @@ void ImGuiApplication::Render()
                 static_cast<float>(window_size.x * 0.2),
                 static_cast<float>(window_size.y * 0.5),
             },
-            .radius = 200,
+            .radius = 250,
             .value = Interpolation::map_range(static_cast<float>(rpm_data.rpm), static_cast<float>(rpm_data.range.min), static_cast<float>(rpm_data.range.max), 0.0f, 1.0f),
-            .bg_color = THEME_COLOR_BLACK,
+            .bg_color = THEME_COLOR_TRANSPARENT,
             .fg_color = THEME_COLOR_WHITE,
             .needle_color = THEME_COLOR_BLUE_1,
             .text_color = THEME_COLOR_WHITE,
@@ -198,9 +202,15 @@ void ImGuiApplication::Render()
 
     };
 
+    ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[2]);
+
     /* Draw gauges */
     DrawCircularGauge(&speedometer_data.gauge, this->delta_time);
     DrawCircularGauge(&rpm_data.gauge, this->delta_time);
+
+    ImGui::PopFont();
+
+    ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
 
     /* Draw circular gauge editors */
     static bool show_speedometer_editor = true;
@@ -208,6 +218,8 @@ void ImGuiApplication::Render()
 
     static bool show_rpm_editor = true;
     DrawCircularGaugeEditor(rpm_data.gauge, show_rpm_editor, "RPM");
+
+    ImGui::PopFont();
 
     // Create SVG Renderer for icon
     // ImGui::Image((void *)(intptr_t)texture, ImVec2(img_width, img_height), ImVec2(0, 1), ImVec2(1, 0));
