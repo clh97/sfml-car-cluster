@@ -34,7 +34,7 @@ Application::~Application()
     m_adapter->DestroyWindow(m_window);
 }
 
-ImGuiApplication::ImGuiApplication(std::unique_ptr<PlatformAdapter> adapter, std::unique_ptr<ClusterData> _cluster_data, const char *title, int width, int height)
+InstrumentClusterApplication::InstrumentClusterApplication(std::unique_ptr<PlatformAdapter> adapter, std::unique_ptr<ClusterData> _cluster_data, const char *title, int width, int height)
     : Application(std::move(adapter), title, width, height), m_cluster_data(std::move(_cluster_data))
 {
     IMGUI_CHECKVERSION();
@@ -70,17 +70,25 @@ ImGuiApplication::ImGuiApplication(std::unique_ptr<PlatformAdapter> adapter, std
         gl_context
     );
 
+    m_cluster_data->headlights.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->headlights.icon.path,
+        m_cluster_data->headlights.icon.size,
+        m_cluster_data->headlights.icon.position,
+        m_cluster_data->headlights.icon.color,
+        gl_context
+    );
+
     delta_time = 0.0f;
 }
 
-ImGuiApplication::~ImGuiApplication()
+InstrumentClusterApplication::~InstrumentClusterApplication()
 {
     ImGui_ImplSDL2_Shutdown();
     ImGui_ImplOpenGL3_Shutdown();
     ImGui::DestroyContext();
 }
 
-void ImGuiApplication::Run()
+void InstrumentClusterApplication::Run()
 {
     is_running = true;
 
@@ -114,14 +122,14 @@ void ImGuiApplication::Run()
     }
 }
 
-void ImGuiApplication::Update()
+void InstrumentClusterApplication::Update()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
 }
 
-void ImGuiApplication::Render()
+void InstrumentClusterApplication::Render()
 {
     {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -145,6 +153,7 @@ void ImGuiApplication::Render()
 
             /* Draw icons */
             DrawClusterIcon(m_cluster_data->hand_brake.icon, delta_time);
+            DrawClusterIcon(m_cluster_data->headlights.icon, delta_time);
             ImGui::PopFont();
         }
     }

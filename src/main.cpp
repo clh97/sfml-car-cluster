@@ -94,18 +94,41 @@ int main(int argc, char *argv[])
     };
 
     /* Instrument cluster icons */
+    #define IC_ICON_DEFAULT_SIZE ImVec2(64, 64)
+    // lambda function to calculate the position of the icon with 16px of padding in between, starting at x: 1000px and y: 100px, 5 icons per row
+    auto calculate_icon_position = [](int index) -> ImVec2 {
+        int x = (width / 3) + (index % 5) * (16 + 64);
+        int y = 100 + (index / 5) * (16 + 64);
+        return ImVec2(x, y);
+    };
+
+    // Hand brake
     cluster_data->hand_brake = ClusterData::HandBrake{
         .icon = ClusterIcon{
             .path = "../src/assets/images/parking_brake.svg",
-            .position = ImVec2(1000, 275),
-            .size = ImVec2(64, 64),
-            .color = THEME_COLOR_LIGHT_GRAY,
+            .position = calculate_icon_position(0),
+            .size = IC_ICON_DEFAULT_SIZE,
+            .color = THEME_COLOR_DARK_GRAY,
             .texture = NULL,
         },
         .engaged = false,
     };
 
-    ImGuiApplication app(std::move(adapter), std::move(cluster_data), title.c_str(), width, height);
+
+    // Headlights
+    cluster_data->headlights = ClusterData::Headlights{
+        .icon = ClusterIcon{
+            .path = "../src/assets/images/headlights.svg",
+            .position = calculate_icon_position(1),
+            .size = IC_ICON_DEFAULT_SIZE,
+            .color = THEME_COLOR_DARK_GRAY,
+            .texture = NULL,
+        },
+        .on = false,
+        .high_beam = false,
+    };
+
+    InstrumentClusterApplication app(std::move(adapter), std::move(cluster_data), title.c_str(), width, height);
 
     app.Run();
 

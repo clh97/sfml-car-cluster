@@ -41,5 +41,12 @@ public:
         ClusterIcon icon;
     } hand_brake;
 
+    struct Headlights
+    {
+        bool on = false;
+        bool high_beam = false;
+        ClusterIcon icon;
+    } headlights;
+
     ClusterData() : rpm{}, speedometer{}, hand_brake{} {}
 };

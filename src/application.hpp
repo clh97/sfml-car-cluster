@@ -36,11 +36,11 @@ protected:
     int frame_count = 0;
 };
 
-class ImGuiApplication : public Application
+class InstrumentClusterApplication : public Application
 {
 public:
-    ImGuiApplication(std::unique_ptr<PlatformAdapter> adapter, std::unique_ptr<ClusterData> cluster_data, const char *title, int width, int height);
-    ~ImGuiApplication();
+    InstrumentClusterApplication(std::unique_ptr<PlatformAdapter> adapter, std::unique_ptr<ClusterData> cluster_data, const char *title, int width, int height);
+    ~InstrumentClusterApplication();
 
     void Run() override;
 
