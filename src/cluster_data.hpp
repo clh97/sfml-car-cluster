@@ -41,5 +41,5 @@ public:
         ClusterIcon icon;
     } hand_brake;
 
-    // ClusterData() : rpm{}, speedometer{}, hand_brake{} {}
+    ClusterData() : rpm{}, speedometer{}, hand_brake{} {}
 };

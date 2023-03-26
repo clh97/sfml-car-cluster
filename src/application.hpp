@@ -39,7 +39,7 @@ protected:
 class ImGuiApplication : public Application
 {
 public:
-    ImGuiApplication(std::unique_ptr<PlatformAdapter> adapter, const char *title, int width, int height);
+    ImGuiApplication(std::unique_ptr<PlatformAdapter> adapter, std::unique_ptr<ClusterData> cluster_data, const char *title, int width, int height);
     ~ImGuiApplication();
 
     void Run() override;
@@ -49,5 +49,5 @@ public:
     void Render() override;
 
 private:
-    ClusterData cluster_data;
+    std::unique_ptr<ClusterData> m_cluster_data;
 };

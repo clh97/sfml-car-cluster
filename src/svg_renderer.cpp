@@ -3,6 +3,10 @@
 SVGRenderer::SVGRenderer()
 {
     rast = nsvgCreateRasterizer();
+
+    if (rast == NULL) {
+        fmt::print("Failed to create rasterizer");
+    }
 }
 
 SVGRenderer::~SVGRenderer()
@@ -10,26 +14,51 @@ SVGRenderer::~SVGRenderer()
     nsvgDeleteRasterizer(rast);
 }
 
-SDL_Texture * SVGRenderer::renderSVG(const std::string &svg, const ImVec2 &size, const ImVec2 &position, const ImVec4 &color, SDL_Renderer* &renderer)
-{
-    NSVGimage *image = nsvgParse((char *)svg.c_str(), "px", 96);
-    if (image == NULL)
-    {
-        fmt::print("Error parsing SVG data.\n");
-        return NULL;
+GLuint SVGRenderer::renderSVG(const std::string svg_file_path, const ImVec2& size, const ImVec2& position, const ImVec4& color, SDL_GLContext& gl_context) {
+    NSVGimage* image = nsvgParseFromFile(svg_file_path.c_str(), "px", 96.0f);
+
+    if (image == nullptr) {
+        std::cerr << "Failed to load SVG file: " << svg_file_path << std::endl;
+        return 0;
     }
 
-    int img_width = (int)image->width;
-    int img_height = (int)image->height;
-    unsigned char *img_data = new unsigned char[img_width * img_height * 4];
-    nsvgRasterize(rast, image, 0, 0, 1, img_data, img_width, img_height, img_width * 4);
+    GLuint texture_id;
+    glGenTextures(1, &texture_id);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
 
-    SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, img_width, img_height);
-    SDL_UpdateTexture(texture, NULL, img_data, img_width * 4);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    delete[] img_data;
+    float scale = std::min(size.x / image->width, size.y / image->height);
+
+    unsigned char* buffer = new unsigned char[(int)size.x * (int)size.y * 4];
+    nsvgRasterize(rast, image, 0, 0, scale, buffer, (int)size.x, (int)size.y, (int)size.x * 4);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (int)size.x, (int)size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+
+    glColor4f(color.x, color.y, color.z, color.w);
+
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex2f(position.x, position.y);
+
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex2f(position.x + size.x, position.y);
+
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex2f(position.x + size.x, position.y + size.y);
+
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex2f(position.x, position.y + size.y);
+    glEnd();
+
+    delete[] buffer;
     nsvgDelete(image);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
-    return texture;
+    return texture_id;
 }
-

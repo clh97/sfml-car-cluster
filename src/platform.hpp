@@ -30,7 +30,6 @@ public:
 
     void DestroyWindow(SDL_Window *window);
     void SetCurrentContext(SDL_Window *window);
-
     void SwapBuffers(SDL_Window *window);
 private:
     SDL_GLContext gl_context_;

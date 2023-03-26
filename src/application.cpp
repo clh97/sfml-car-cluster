@@ -1,7 +1,9 @@
 #include "application.hpp"
+#include "svg_renderer.hpp"
 
 #include "interpolation.cpp"
 #include "imgui/components/circular_gauge.cpp"
+#include "imgui/components/cluster_icon.cpp"
 
 Application::Application(std::unique_ptr<PlatformAdapter> adapter, const char *title, int width, int height)
     : m_adapter(std::move(adapter))
@@ -32,8 +34,8 @@ Application::~Application()
     m_adapter->DestroyWindow(m_window);
 }
 
-ImGuiApplication::ImGuiApplication(std::unique_ptr<PlatformAdapter> adapter, const char *title, int width, int height)
-    : Application(std::move(adapter), title, width, height)
+ImGuiApplication::ImGuiApplication(std::unique_ptr<PlatformAdapter> adapter, std::unique_ptr<ClusterData> _cluster_data, const char *title, int width, int height)
+    : Application(std::move(adapter), title, width, height), m_cluster_data(std::move(_cluster_data))
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -54,6 +56,19 @@ ImGuiApplication::ImGuiApplication(std::unique_ptr<PlatformAdapter> adapter, con
 
     ImGui_ImplSDL2_InitForOpenGL(m_window, SDL_GL_GetCurrentContext());
     ImGui_ImplOpenGL3_Init("#version 330");
+
+    // Load textures
+    SVGRenderer svg_renderer;
+    SDL_GLContext gl_context = SDL_GL_GetCurrentContext();
+
+    fmt::print("Loading textures...\n");
+    m_cluster_data->hand_brake.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->hand_brake.icon.path,
+        m_cluster_data->hand_brake.icon.size,
+        m_cluster_data->hand_brake.icon.position,
+        m_cluster_data->hand_brake.icon.color,
+        gl_context
+    );
 
     delta_time = 0.0f;
 }
@@ -108,127 +123,49 @@ void ImGuiApplication::Update()
 
 void ImGuiApplication::Render()
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    {
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
 
-    bool is_open = true;
-    ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoNav;
-    ImGui::Begin("Gauge", &is_open, flags);
+    {
+        bool is_open = true;
+        ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoNav;
 
-    ImGui::SetWindowPos(ImVec2(0, 0));
+        ImGui::Begin("Gauge", &is_open, flags);
+        ImGui::SetWindowPos(ImVec2(0, 0));
+        SDL_Point window_size = m_adapter->GetWindowSize(m_window);
+        ImGui::SetWindowSize(ImVec2(window_size.x, window_size.y));
 
-    SDL_Point window_size = m_adapter->GetWindowSize(m_window);
+        {
+            ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[2]);
+            /* Draw gauges */
+            DrawCircularGauge(m_cluster_data->speedometer.gauge, delta_time);
+            DrawCircularGauge(m_cluster_data->rpm.gauge, delta_time);
 
-    ImGui::SetWindowSize(ImVec2(window_size.x, window_size.y));
-
-    /* Instrument cluster components */
-
-    /* Speedometer gauge */
-    static ClusterData::Speedometer speedometer_data = ClusterData::Speedometer{
-        .range = {0, 280},
-        .format = "{} km/h",
-        .kmh_speed = (total_elapsed_time * 10.f), // ECU info
-        .gauge = {
-            .label = fmt::format(speedometer_data.format, static_cast<int>(speedometer_data.kmh_speed)),
-            .center = {
-                static_cast<float>(window_size.x * 0.8),
-                static_cast<float>(window_size.y * 0.5),
-            },
-            .radius = 250,
-            .value = Interpolation::map_range(static_cast<float>(speedometer_data.kmh_speed), static_cast<float>(speedometer_data.range.min), static_cast<float>(speedometer_data.range.max), 0.0f, 1.0f),
-            .bg_color = THEME_COLOR_TRANSPARENT,
-            .fg_color = THEME_COLOR_WHITE,
-            .needle_color = THEME_COLOR_BLUE_1,
-            .text_color = THEME_COLOR_WHITE,
-            .hide_outline = false,
-            .hide_bottom = false,
-            .num_ticks = 14,
-            .start_angle = 135,
-            .end_angle = 45,
-            .angle_range = 270,
-            .min_value = 0.0f,
-            .max_value = 1.0f,
-            .range_limits = {
-                .min = speedometer_data.range.min,
-                .max = speedometer_data.range.max,
-            },
-            .critical_zone = {
-                .enabled = false,
-                .start_percent = 0.9f,
-                .color = THEME_COLOR_BLUE_1,
-            }
+            /* Draw icons */
+            DrawClusterIcon(m_cluster_data->hand_brake.icon, delta_time);
+            ImGui::PopFont();
         }
-    };
+    }
 
-    /* RPM gauge */
-    static ClusterData::RPM rpm_data = ClusterData::RPM{
-        .range = {0, 8000},
-        .format = "{} RPM",
-        .rpm = total_elapsed_time * 100.f, // ECU info
-        .gauge = {
-            .label = fmt::format(rpm_data.format, static_cast<int>(rpm_data.rpm)),
-            .center = {
-                static_cast<float>(window_size.x * 0.2),
-                static_cast<float>(window_size.y * 0.5),
-            },
-            .radius = 250,
-            .value = Interpolation::map_range(static_cast<float>(rpm_data.rpm), static_cast<float>(rpm_data.range.min), static_cast<float>(rpm_data.range.max), 0.0f, 1.0f),
-            .bg_color = THEME_COLOR_TRANSPARENT,
-            .fg_color = THEME_COLOR_WHITE,
-            .needle_color = THEME_COLOR_BLUE_1,
-            .text_color = THEME_COLOR_WHITE,
-            .hide_outline = false,
-            .hide_bottom = true,
-            .num_ticks = 8,
-            .start_angle = 135,
-            .end_angle = 45,
-            .angle_range = 270,
-            .min_value = 0.0f,
-            .max_value = 1.0f,
-            .range_limits = {
-                .min = rpm_data.range.min,
-                .max = rpm_data.range.max,
-            },
-            .critical_zone = {
-                .enabled = true,
-                .start_percent = 0.8f,
-                .color = THEME_COLOR_BLUE_1,
-            }
-        }
-    };
+    {
+        ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
 
-    /* Cluster icons */
-    static ClusterData::HandBrake hand_brake = ClusterData::HandBrake{
+        /* Draw circular gauge editors */
+        static bool show_speedometer_editor = true;
+        DrawCircularGaugeEditor(m_cluster_data->speedometer.gauge, show_speedometer_editor, "Speedometer");
 
-    };
+        static bool show_rpm_editor = true;
+        DrawCircularGaugeEditor(m_cluster_data->rpm.gauge, show_rpm_editor, "RPM");
 
-    ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[2]);
+        ImGui::PopFont();
+    }
 
-    /* Draw gauges */
-    DrawCircularGauge(&speedometer_data.gauge, this->delta_time);
-    DrawCircularGauge(&rpm_data.gauge, this->delta_time);
-
-    ImGui::PopFont();
-
-    ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
-
-    /* Draw circular gauge editors */
-    static bool show_speedometer_editor = true;
-    DrawCircularGaugeEditor(speedometer_data.gauge, show_speedometer_editor, "Speedometer");
-
-    static bool show_rpm_editor = true;
-    DrawCircularGaugeEditor(rpm_data.gauge, show_rpm_editor, "RPM");
-
-    ImGui::PopFont();
-
-    // Create SVG Renderer for icon
-    // ImGui::Image((void *)(intptr_t)texture, ImVec2(img_width, img_height), ImVec2(0, 1), ImVec2(1, 0));
-
-    // ImGui::ShowDemoWindow();
-    ImGui::End();
-
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    glFlush();
+    {
+        ImGui::End();
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        glFlush();
+    }
 }
