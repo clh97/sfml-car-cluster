@@ -27,13 +27,27 @@ public:
         float rpm = 0;
         std::string format = "{} RPM";
 
-        struct {
+        struct
+        {
             int min;
             int max;
         } range;
 
         CircularGauge gauge;
     } rpm;
+
+    struct Fuel
+    {
+        float fuel = 0;
+        std::string format = "{} L";
+        struct
+        {
+            int min;
+            int max;
+        } range;
+
+        CircularGauge gauge;
+    } fuel;
 
     struct HandBrake
     {
@@ -48,5 +62,25 @@ public:
         ClusterIcon icon;
     } headlights;
 
-    ClusterData() : rpm{}, speedometer{}, hand_brake{} {}
+    struct Wipers
+    {
+        bool on = false;
+        ClusterIcon icon;
+    } wipers;
+
+    struct ArrowLeft
+    {
+        bool on = false;
+        ClusterIcon icon;
+    } arrow_left;
+
+    struct ArrowRight
+    {
+        bool on = false;
+        ClusterIcon icon;
+    } arrow_right;
+
+    // TODO - ClusterLabel entity handling: gear, time, etc.
+
+    ClusterData() : rpm{}, speedometer{}, fuel{}, hand_brake{}, headlights{}, wipers{}  {}
 };

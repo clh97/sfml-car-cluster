@@ -15,7 +15,7 @@ SVGRenderer::~SVGRenderer()
 }
 
 GLuint SVGRenderer::renderSVG(const std::string svg_file_path, const ImVec2& size, const ImVec2& position, const ImVec4& color, SDL_GLContext& gl_context) {
-    NSVGimage* image = nsvgParseFromFile(svg_file_path.c_str(), "px", 96.0f);
+    NSVGimage* image = nsvgParseFromFile(svg_file_path.c_str(), "px", 128.0f);
 
     if (image == nullptr) {
         std::cerr << "Failed to load SVG file: " << svg_file_path << std::endl;

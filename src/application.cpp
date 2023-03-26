@@ -78,6 +78,30 @@ InstrumentClusterApplication::InstrumentClusterApplication(std::unique_ptr<Platf
         gl_context
     );
 
+    m_cluster_data->wipers.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->wipers.icon.path,
+        m_cluster_data->wipers.icon.size,
+        m_cluster_data->wipers.icon.position,
+        m_cluster_data->wipers.icon.color,
+        gl_context
+    );
+
+    m_cluster_data->arrow_left.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->arrow_left.icon.path,
+        m_cluster_data->arrow_left.icon.size,
+        m_cluster_data->arrow_left.icon.position,
+        m_cluster_data->arrow_left.icon.color,
+        gl_context
+    );
+
+    m_cluster_data->arrow_right.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->arrow_right.icon.path,
+        m_cluster_data->arrow_right.icon.size,
+        m_cluster_data->arrow_right.icon.position,
+        m_cluster_data->arrow_right.icon.color,
+        gl_context
+    );
+
     delta_time = 0.0f;
 }
 
@@ -154,6 +178,10 @@ void InstrumentClusterApplication::Render()
             /* Draw icons */
             DrawClusterIcon(m_cluster_data->hand_brake.icon, delta_time);
             DrawClusterIcon(m_cluster_data->headlights.icon, delta_time);
+            DrawClusterIcon(m_cluster_data->wipers.icon, delta_time);
+            DrawClusterIcon(m_cluster_data->arrow_left.icon, delta_time);
+            DrawClusterIcon(m_cluster_data->arrow_right.icon, delta_time);
+
             ImGui::PopFont();
         }
     }

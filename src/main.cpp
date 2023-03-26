@@ -95,18 +95,32 @@ int main(int argc, char *argv[])
 
     /* Instrument cluster icons */
     #define IC_ICON_DEFAULT_SIZE ImVec2(64, 64)
-    // lambda function to calculate the position of the icon with 16px of padding in between, starting at x: 1000px and y: 100px, 5 icons per row
-    auto calculate_icon_position = [](int index) -> ImVec2 {
-        int x = (width / 3) + (index % 5) * (16 + 64);
-        int y = 100 + (index / 5) * (16 + 64);
+    #define IC_ICON_DEFAULT_SPACING 16
+    #define IC_ICON_DEFAULT_ROW_QTY 5
+
+    auto calc_icon_pos = [](int index) -> ImVec2 {
+        int x = (width / 2 - ((IC_ICON_DEFAULT_SIZE.x - IC_ICON_DEFAULT_SPACING) * IC_ICON_DEFAULT_ROW_QTY)) + (index % IC_ICON_DEFAULT_ROW_QTY) * (IC_ICON_DEFAULT_SPACING + IC_ICON_DEFAULT_SIZE.x);
+        int y = 32 + (index / IC_ICON_DEFAULT_ROW_QTY) * (IC_ICON_DEFAULT_SPACING + IC_ICON_DEFAULT_SIZE.y);
         return ImVec2(x, y);
+    };
+
+    // Left arrow
+    cluster_data->arrow_left = ClusterData::ArrowLeft{
+        .icon = ClusterIcon{
+            .path = "../src/assets/images/arrow_left.svg",
+            .position = calc_icon_pos(0),
+            .size = IC_ICON_DEFAULT_SIZE,
+            .color = THEME_COLOR_DARK_GRAY,
+            .texture = NULL,
+        },
+        .on = false,
     };
 
     // Hand brake
     cluster_data->hand_brake = ClusterData::HandBrake{
         .icon = ClusterIcon{
             .path = "../src/assets/images/parking_brake.svg",
-            .position = calculate_icon_position(0),
+            .position = calc_icon_pos(1),
             .size = IC_ICON_DEFAULT_SIZE,
             .color = THEME_COLOR_DARK_GRAY,
             .texture = NULL,
@@ -119,13 +133,37 @@ int main(int argc, char *argv[])
     cluster_data->headlights = ClusterData::Headlights{
         .icon = ClusterIcon{
             .path = "../src/assets/images/headlights.svg",
-            .position = calculate_icon_position(1),
+            .position = calc_icon_pos(2),
             .size = IC_ICON_DEFAULT_SIZE,
             .color = THEME_COLOR_DARK_GRAY,
             .texture = NULL,
         },
         .on = false,
         .high_beam = false,
+    };
+
+    // Wipers
+    cluster_data->wipers = ClusterData::Wipers{
+        .icon = ClusterIcon{
+            .path = "../src/assets/images/wipers.svg",
+            .position = calc_icon_pos(3),
+            .size = IC_ICON_DEFAULT_SIZE,
+            .color = THEME_COLOR_DARK_GRAY,
+            .texture = NULL,
+        },
+        .on = false,
+    };
+
+    // Right arrow
+    cluster_data->arrow_right = ClusterData::ArrowRight{
+        .icon = ClusterIcon{
+            .path = "../src/assets/images/arrow_right.svg",
+            .position = calc_icon_pos(4),
+            .size = IC_ICON_DEFAULT_SIZE,
+            .color = THEME_COLOR_DARK_GRAY,
+            .texture = NULL,
+        },
+        .on = false,
     };
 
     InstrumentClusterApplication app(std::move(adapter), std::move(cluster_data), title.c_str(), width, height);
