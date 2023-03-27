@@ -147,13 +147,12 @@ static void DrawCircularGauge(CircularGauge &gauge, float delta_time)
     }
 }
 
-static void DrawCircularGaugeEditor(CircularGauge &gauge, bool is_open, std::string title)
+static void DrawCircularGaugeEditor(CircularGauge &gauge, std::string title)
 {
-    ImGui::SetNextWindowSize(ImVec2(400, 400), ImGuiCond_FirstUseEver);
-
-    if (is_open)
+    // ImGui::SetNextWindowSize(ImVec2(0, 0), ImGuiCond_None);
+    if (ImGui::CollapsingHeader(title.c_str()))
     {
-        ImGui::Begin(std::string("Circular Gauge Editor - " + title).c_str());
+        ImGui::BeginChild(std::string("Circular Gauge Editor - " + title).c_str());
         ImGui::Text("Center");
         ImGui::DragFloat2("##Center", &gauge.center.x, 1.0f);
 
@@ -172,16 +171,16 @@ static void DrawCircularGaugeEditor(CircularGauge &gauge, bool is_open, std::str
         }
 
         ImGui::Text("Background Color");
-        ImGui::ColorEdit4("##BGColor", (float*)&gauge.bg_color);
+        ImGui::ColorEdit4("##BGColor", (float *)&gauge.bg_color);
 
         ImGui::Text("Foreground Color");
-        ImGui::ColorEdit4("##FGColor", (float*)&gauge.fg_color);
+        ImGui::ColorEdit4("##FGColor", (float *)&gauge.fg_color);
 
         ImGui::Text("Needle Color");
-        ImGui::ColorEdit4("##NeedleColor", (float*)&gauge.needle_color);
+        ImGui::ColorEdit4("##NeedleColor", (float *)&gauge.needle_color);
 
         ImGui::Text("Text Color");
-        ImGui::ColorEdit4("##TextColor", (float*)&gauge.text_color);
+        ImGui::ColorEdit4("##TextColor", (float *)&gauge.text_color);
 
         ImGui::Text("Hide Outline");
         ImGui::Checkbox("##HideOutline", &gauge.hide_outline);
@@ -218,7 +217,7 @@ static void DrawCircularGaugeEditor(CircularGauge &gauge, bool is_open, std::str
         ImGui::DragFloat("##CriticalZoneStartPercent", &gauge.critical_zone.start_percent, 0.01f, 0.0f, 100.0f);
         ImGui::SameLine();
         ImGui::Text("Start Percent");
-        ImGui::ColorEdit4("##CriticalZoneColor", (float*)&gauge.critical_zone.color);
-        ImGui::End();
+        ImGui::ColorEdit4("##CriticalZoneColor", (float *)&gauge.critical_zone.color);
+        ImGui::EndChild();
     }
 }

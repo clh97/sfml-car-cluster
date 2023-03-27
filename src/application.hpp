@@ -27,6 +27,7 @@ public:
 
 protected:
     bool is_running = false;
+    bool show_editor = true;
     float last_frame_time = 0.0f;
     float current_frame_time = 0.0f;
     float delta_time = 0.0f;

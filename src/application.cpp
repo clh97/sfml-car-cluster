@@ -67,40 +67,35 @@ InstrumentClusterApplication::InstrumentClusterApplication(std::unique_ptr<Platf
         m_cluster_data->hand_brake.icon.size,
         m_cluster_data->hand_brake.icon.position,
         m_cluster_data->hand_brake.icon.color,
-        gl_context
-    );
+        gl_context);
 
     m_cluster_data->headlights.icon.texture = svg_renderer.renderSVG(
         m_cluster_data->headlights.icon.path,
         m_cluster_data->headlights.icon.size,
         m_cluster_data->headlights.icon.position,
         m_cluster_data->headlights.icon.color,
-        gl_context
-    );
+        gl_context);
 
     m_cluster_data->wipers.icon.texture = svg_renderer.renderSVG(
         m_cluster_data->wipers.icon.path,
         m_cluster_data->wipers.icon.size,
         m_cluster_data->wipers.icon.position,
         m_cluster_data->wipers.icon.color,
-        gl_context
-    );
+        gl_context);
 
     m_cluster_data->arrow_left.icon.texture = svg_renderer.renderSVG(
         m_cluster_data->arrow_left.icon.path,
         m_cluster_data->arrow_left.icon.size,
         m_cluster_data->arrow_left.icon.position,
         m_cluster_data->arrow_left.icon.color,
-        gl_context
-    );
+        gl_context);
 
     m_cluster_data->arrow_right.icon.texture = svg_renderer.renderSVG(
         m_cluster_data->arrow_right.icon.path,
         m_cluster_data->arrow_right.icon.size,
         m_cluster_data->arrow_right.icon.position,
         m_cluster_data->arrow_right.icon.color,
-        gl_context
-    );
+        gl_context);
 
     delta_time = 0.0f;
 }
@@ -127,6 +122,19 @@ void InstrumentClusterApplication::Run()
             if (event.type == SDL_QUIT)
             {
                 is_running = false;
+            }
+
+            if (event.type == SDL_KEYDOWN)
+            {
+                if (event.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    is_running = false;
+                }
+
+                if (event.key.keysym.sym == SDLK_F3)
+                {
+                    show_editor = !show_editor;
+                }
             }
         }
 
@@ -155,21 +163,43 @@ void InstrumentClusterApplication::Update()
 
 void InstrumentClusterApplication::Render()
 {
+    SDL_Point window_size = m_adapter->GetWindowSize(m_window);
+    bool is_open = true;
+
     {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
     {
-        bool is_open = true;
-        ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoNav;
+        ImGui::SetNextWindowSize(ImVec2(window_size.x, window_size.y));
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
+        ImGui::Begin("Gauge", &is_open, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoNav);
 
-        ImGui::Begin("Gauge", &is_open, flags);
-        ImGui::SetWindowPos(ImVec2(0, 0));
-        SDL_Point window_size = m_adapter->GetWindowSize(m_window);
-        ImGui::SetWindowSize(ImVec2(window_size.x, window_size.y));
+        if (show_editor)
+        {
+            ImGui::BeginChild("Editor", ImVec2(window_size.x / 2, window_size.y), true, ImGuiWindowFlags_NoBackground);
+            ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
+
+            /* Cluster data */
+            ImGui::Text("Cluster data");
+            ImGui::SliderFloat("Speed", &m_cluster_data->speedometer.kmh_speed, (float)m_cluster_data->speedometer.range.min, (float)m_cluster_data->speedometer.range.max, "%d km/h");
+            ImGui::SliderFloat("RPM", &m_cluster_data->rpm.rpm, m_cluster_data->rpm.range.min, m_cluster_data->rpm.range.max, "%d RPM");
+            ImGui::Checkbox("Hand brake", &m_cluster_data->hand_brake.engaged);
+            ImGui::Checkbox("Headlights", &m_cluster_data->headlights.on);
+            if (m_cluster_data->headlights.on) ImGui::Checkbox("Headlights high beam", &m_cluster_data->headlights.high_beam);
+            ImGui::Checkbox("Wipers", &m_cluster_data->wipers.on);
+
+            ImGui::Separator();
+
+            ImGui::PopFont();
+            ImGui::EndChild();
+        }
 
         {
+            ImGui::SameLine();
+            // ImGui::SetNextWindowPos(ImVec2(0, 0));
+            ImGui::BeginChild("Cluster", ImVec2(window_size.x, window_size.y), false);
             ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[2]);
             /* Draw gauges */
             DrawCircularGauge(m_cluster_data->speedometer.gauge, delta_time);
@@ -180,23 +210,12 @@ void InstrumentClusterApplication::Render()
             DrawClusterIcon(m_cluster_data->headlights.icon, delta_time);
             DrawClusterIcon(m_cluster_data->wipers.icon, delta_time);
             DrawClusterIcon(m_cluster_data->arrow_left.icon, delta_time);
+
             DrawClusterIcon(m_cluster_data->arrow_right.icon, delta_time);
 
             ImGui::PopFont();
+            ImGui::EndChild();
         }
-    }
-
-    {
-        ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
-
-        /* Draw circular gauge editors */
-        static bool show_speedometer_editor = true;
-        DrawCircularGaugeEditor(m_cluster_data->speedometer.gauge, show_speedometer_editor, "Speedometer");
-
-        static bool show_rpm_editor = true;
-        DrawCircularGaugeEditor(m_cluster_data->rpm.gauge, show_rpm_editor, "RPM");
-
-        ImGui::PopFont();
     }
 
     {

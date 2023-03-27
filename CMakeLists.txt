@@ -60,6 +60,7 @@ add_executable(InstrumentCluster
     ${SOURCE_CPP}
     ${SOURCE_HEADER}
     src/imgui/imgui.cpp
+    src/imgui/imgui_stdlib.cpp
     src/imgui/imgui_draw.cpp
     src/imgui/imgui_demo.cpp
     src/imgui/imgui_tables.cpp
