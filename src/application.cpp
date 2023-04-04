@@ -61,41 +61,106 @@ InstrumentClusterApplication::InstrumentClusterApplication(std::unique_ptr<Platf
     SVGRenderer svg_renderer;
     SDL_GLContext gl_context = SDL_GL_GetCurrentContext();
 
+    // DrawClusterIcon(m_cluster_data->arrow_left.icon, delta_time);
+    // DrawClusterIcon(m_cluster_data->arrow_right.icon, delta_time);
+    // DrawClusterIcon(m_cluster_data->battery.icon, delta_time);
+    // DrawClusterIcon(m_cluster_data->engine.icon, delta_time);
+    // DrawClusterIcon(m_cluster_data->hand_brake.icon, delta_time);
+    // DrawClusterIcon(m_cluster_data->headlights.icon, delta_time);
+    // DrawClusterIcon(m_cluster_data->oil.icon, delta_time);
+    // DrawClusterIcon(m_cluster_data->temperature.icon, delta_time);
+    // DrawClusterIcon(m_cluster_data->wipers.icon, delta_time);
+
     fmt::print("Loading textures...\n");
-    m_cluster_data->hand_brake.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->hand_brake.icon.path,
-        m_cluster_data->hand_brake.icon.size,
-        m_cluster_data->hand_brake.icon.position,
-        m_cluster_data->hand_brake.icon.color,
+    m_cluster_data->arrow_left.cli.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->arrow_left.cli.icon.path,
+        m_cluster_data->arrow_left.cli.icon.size,
+        m_cluster_data->arrow_left.cli.icon.position,
+        m_cluster_data->arrow_left.cli.icon.color,
         gl_context);
 
-    m_cluster_data->headlights.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->headlights.icon.path,
-        m_cluster_data->headlights.icon.size,
-        m_cluster_data->headlights.icon.position,
-        m_cluster_data->headlights.icon.color,
+    m_cluster_data->arrow_right.cli.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->arrow_right.cli.icon.path,
+        m_cluster_data->arrow_right.cli.icon.size,
+        m_cluster_data->arrow_right.cli.icon.position,
+        m_cluster_data->arrow_right.cli.icon.color,
         gl_context);
 
-    m_cluster_data->wipers.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->wipers.icon.path,
-        m_cluster_data->wipers.icon.size,
-        m_cluster_data->wipers.icon.position,
-        m_cluster_data->wipers.icon.color,
+    m_cluster_data->battery.cli.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->battery.cli.icon.path,
+        m_cluster_data->battery.cli.icon.size,
+        m_cluster_data->battery.cli.icon.position,
+        m_cluster_data->battery.cli.icon.color,
         gl_context);
 
-    m_cluster_data->arrow_left.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->arrow_left.icon.path,
-        m_cluster_data->arrow_left.icon.size,
-        m_cluster_data->arrow_left.icon.position,
-        m_cluster_data->arrow_left.icon.color,
+    m_cluster_data->door_lock.cli.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->door_lock.cli.icon.path,
+        m_cluster_data->door_lock.cli.icon.size,
+        m_cluster_data->door_lock.cli.icon.position,
+        m_cluster_data->door_lock.cli.icon.color,
         gl_context);
 
-    m_cluster_data->arrow_right.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->arrow_right.icon.path,
-        m_cluster_data->arrow_right.icon.size,
-        m_cluster_data->arrow_right.icon.position,
-        m_cluster_data->arrow_right.icon.color,
+    m_cluster_data->engine.cli.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->engine.cli.icon.path,
+        m_cluster_data->engine.cli.icon.size,
+        m_cluster_data->engine.cli.icon.position,
+        m_cluster_data->engine.cli.icon.color,
         gl_context);
+
+    m_cluster_data->hand_brake.cli.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->hand_brake.cli.icon.path,
+        m_cluster_data->hand_brake.cli.icon.size,
+        m_cluster_data->hand_brake.cli.icon.position,
+        m_cluster_data->hand_brake.cli.icon.color,
+        gl_context);
+
+    m_cluster_data->headlights.cli.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->headlights.cli.icon.path,
+        m_cluster_data->headlights.cli.icon.size,
+        m_cluster_data->headlights.cli.icon.position,
+        m_cluster_data->headlights.cli.icon.color,
+        gl_context);
+
+    m_cluster_data->oil.cli.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->oil.cli.icon.path,
+        m_cluster_data->oil.cli.icon.size,
+        m_cluster_data->oil.cli.icon.position,
+        m_cluster_data->oil.cli.icon.color,
+        gl_context);
+
+    m_cluster_data->temperature.cli.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->temperature.cli.icon.path,
+        m_cluster_data->temperature.cli.icon.size,
+        m_cluster_data->temperature.cli.icon.position,
+        m_cluster_data->temperature.cli.icon.color,
+        gl_context);
+
+    m_cluster_data->abs.cli.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->abs.cli.icon.path,
+        m_cluster_data->abs.cli.icon.size,
+        m_cluster_data->abs.cli.icon.position,
+        m_cluster_data->abs.cli.icon.color,
+        gl_context);
+
+    m_cluster_data->wipers.cli.icon.texture = svg_renderer.renderSVG(
+        m_cluster_data->wipers.cli.icon.path,
+        m_cluster_data->wipers.cli.icon.size,
+        m_cluster_data->wipers.cli.icon.position,
+        m_cluster_data->wipers.cli.icon.color,
+        gl_context);
+
+    m_cluster_data->lights.push_back(&m_cluster_data->arrow_left.cli);
+    m_cluster_data->lights.push_back(&m_cluster_data->arrow_right.cli);
+    m_cluster_data->lights.push_back(&m_cluster_data->battery.cli);
+    m_cluster_data->lights.push_back(&m_cluster_data->door_lock.cli);
+    m_cluster_data->lights.push_back(&m_cluster_data->engine.cli);
+    m_cluster_data->lights.push_back(&m_cluster_data->hand_brake.cli);
+    m_cluster_data->lights.push_back(&m_cluster_data->headlights.cli);
+    m_cluster_data->lights.push_back(&m_cluster_data->oil.cli);
+    m_cluster_data->lights.push_back(&m_cluster_data->temperature.cli);
+    m_cluster_data->lights.push_back(&m_cluster_data->abs.cli);
+    m_cluster_data->lights.push_back(&m_cluster_data->wipers.cli);
+
 
     delta_time = 0.0f;
 }
@@ -159,6 +224,12 @@ void InstrumentClusterApplication::Update()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
+
+    // for (auto& icon : m_cluster_data->icons)
+    // {
+    //     if (icon->)
+    // }
+
 }
 
 void InstrumentClusterApplication::Render()
@@ -185,10 +256,10 @@ void InstrumentClusterApplication::Render()
             ImGui::Text("Cluster data");
             ImGui::SliderFloat("Speed", &m_cluster_data->speedometer.kmh_speed, (float)m_cluster_data->speedometer.range.min, (float)m_cluster_data->speedometer.range.max, "%d km/h");
             ImGui::SliderFloat("RPM", &m_cluster_data->rpm.rpm, m_cluster_data->rpm.range.min, m_cluster_data->rpm.range.max, "%d RPM");
-            ImGui::Checkbox("Hand brake", &m_cluster_data->hand_brake.engaged);
-            ImGui::Checkbox("Headlights", &m_cluster_data->headlights.on);
-            if (m_cluster_data->headlights.on) ImGui::Checkbox("Headlights high beam", &m_cluster_data->headlights.high_beam);
-            ImGui::Checkbox("Wipers", &m_cluster_data->wipers.on);
+            ImGui::Checkbox("Hand brake", &m_cluster_data->hand_brake.cli.on);
+            ImGui::Checkbox("Headlights", &m_cluster_data->headlights.cli.on);
+            if (m_cluster_data->headlights.cli.on) ImGui::Checkbox("Headlights high beam", &m_cluster_data->headlights.high_beam);
+            ImGui::Checkbox("Wipers", &m_cluster_data->wipers.cli.on);
 
             ImGui::Separator();
 
@@ -206,12 +277,18 @@ void InstrumentClusterApplication::Render()
             DrawCircularGauge(m_cluster_data->rpm.gauge, delta_time);
 
             /* Draw icons */
-            DrawClusterIcon(m_cluster_data->hand_brake.icon, delta_time);
-            DrawClusterIcon(m_cluster_data->headlights.icon, delta_time);
-            DrawClusterIcon(m_cluster_data->wipers.icon, delta_time);
-            DrawClusterIcon(m_cluster_data->arrow_left.icon, delta_time);
+            // DrawClusterIcon(m_cluster_data->abs.icon, delta_time);
+            DrawClusterIcon(m_cluster_data->arrow_left.cli.icon, delta_time);
+            DrawClusterIcon(m_cluster_data->arrow_right.cli.icon, delta_time);
+            DrawClusterIcon(m_cluster_data->battery.cli.icon, delta_time);
+            DrawClusterIcon(m_cluster_data->door_lock.cli.icon, delta_time);
+            DrawClusterIcon(m_cluster_data->engine.cli.icon, delta_time);
+            DrawClusterIcon(m_cluster_data->hand_brake.cli.icon, delta_time);
+            DrawClusterIcon(m_cluster_data->headlights.cli.icon, delta_time);
+            DrawClusterIcon(m_cluster_data->oil.cli.icon, delta_time);
+            DrawClusterIcon(m_cluster_data->temperature.cli.icon, delta_time);
+            DrawClusterIcon(m_cluster_data->wipers.cli.icon, delta_time);
 
-            DrawClusterIcon(m_cluster_data->arrow_right.icon, delta_time);
 
             ImGui::PopFont();
             ImGui::EndChild();

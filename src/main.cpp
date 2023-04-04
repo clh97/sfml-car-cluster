@@ -95,75 +95,139 @@ int main(int argc, char *argv[])
 
     /* Instrument cluster icons */
     #define IC_ICON_DEFAULT_SIZE ImVec2(64, 64)
-    #define IC_ICON_DEFAULT_SPACING 16
+    #define IC_ICON_DEFAULT_HORIZONTAL_GAP 32
+    #define IC_ICON_DEFAULT_VERTICAL_GAP 16
     #define IC_ICON_DEFAULT_ROW_QTY 5
 
     auto calc_icon_pos = [](int index) -> ImVec2 {
-        int x = (width / 2 - ((IC_ICON_DEFAULT_SIZE.x - IC_ICON_DEFAULT_SPACING) * IC_ICON_DEFAULT_ROW_QTY)) + (index % IC_ICON_DEFAULT_ROW_QTY) * (IC_ICON_DEFAULT_SPACING + IC_ICON_DEFAULT_SIZE.x);
-        int y = 32 + (index / IC_ICON_DEFAULT_ROW_QTY) * (IC_ICON_DEFAULT_SPACING + IC_ICON_DEFAULT_SIZE.y);
+        // int x = (width / 2 - ((IC_ICON_DEFAULT_SIZE.x - IC_ICON_DEFAULT_HORIZONTAL_GAP) * IC_ICON_DEFAULT_ROW_QTY)) + (index % IC_ICON_DEFAULT_ROW_QTY) * (IC_ICON_DEFAULT_HORIZONTAL_GAP + IC_ICON_DEFAULT_SIZE.x);
+        int row_size = (IC_ICON_DEFAULT_SIZE.x + IC_ICON_DEFAULT_HORIZONTAL_GAP) * IC_ICON_DEFAULT_ROW_QTY;
+        int x_offset = IC_ICON_DEFAULT_SIZE.x / 2 - IC_ICON_DEFAULT_HORIZONTAL_GAP / 2;
+        int x = ((width / 2) - (row_size / 2)) + (index % IC_ICON_DEFAULT_ROW_QTY) * (IC_ICON_DEFAULT_HORIZONTAL_GAP + IC_ICON_DEFAULT_SIZE.x) - x_offset;
+        int y = (height - IC_ICON_DEFAULT_SIZE.y * 3) + (index / IC_ICON_DEFAULT_ROW_QTY) * (IC_ICON_DEFAULT_VERTICAL_GAP + IC_ICON_DEFAULT_SIZE.y);
         return ImVec2(x, y);
     };
 
+        // Left arrow
     // Left arrow
     cluster_data->arrow_left = ClusterData::ArrowLeft{
-        .icon = ClusterIcon{
+        .cli = ClusterLightIndicator(ClusterIcon{
             .path = "../src/assets/images/arrow_left.svg",
             .position = calc_icon_pos(0),
             .size = IC_ICON_DEFAULT_SIZE,
             .color = THEME_COLOR_DARK_GRAY,
             .texture = NULL,
-        },
-        .on = false,
+        })
     };
 
     // Hand brake
     cluster_data->hand_brake = ClusterData::HandBrake{
-        .icon = ClusterIcon{
+        .cli = ClusterLightIndicator(ClusterIcon{
             .path = "../src/assets/images/parking_brake.svg",
             .position = calc_icon_pos(1),
             .size = IC_ICON_DEFAULT_SIZE,
             .color = THEME_COLOR_DARK_GRAY,
             .texture = NULL,
-        },
-        .engaged = false,
+        })
     };
-
 
     // Headlights
     cluster_data->headlights = ClusterData::Headlights{
-        .icon = ClusterIcon{
+        .cli = ClusterLightIndicator(ClusterIcon{
             .path = "../src/assets/images/headlights.svg",
             .position = calc_icon_pos(2),
             .size = IC_ICON_DEFAULT_SIZE,
             .color = THEME_COLOR_DARK_GRAY,
             .texture = NULL,
-        },
-        .on = false,
-        .high_beam = false,
+        })
     };
 
     // Wipers
     cluster_data->wipers = ClusterData::Wipers{
-        .icon = ClusterIcon{
+        .cli = ClusterLightIndicator(ClusterIcon{
             .path = "../src/assets/images/wipers.svg",
             .position = calc_icon_pos(3),
             .size = IC_ICON_DEFAULT_SIZE,
             .color = THEME_COLOR_DARK_GRAY,
             .texture = NULL,
-        },
-        .on = false,
+        })
     };
 
     // Right arrow
     cluster_data->arrow_right = ClusterData::ArrowRight{
-        .icon = ClusterIcon{
+        .cli = ClusterLightIndicator(ClusterIcon{
             .path = "../src/assets/images/arrow_right.svg",
             .position = calc_icon_pos(4),
             .size = IC_ICON_DEFAULT_SIZE,
             .color = THEME_COLOR_DARK_GRAY,
             .texture = NULL,
-        },
-        .on = false,
+        })
+    };
+
+    // Oil indicator
+    cluster_data->oil = ClusterData::Oil{
+        .cli = ClusterLightIndicator(ClusterIcon{
+            .path = "../src/assets/images/oil.svg",
+            .position = calc_icon_pos(5),
+            .size = IC_ICON_DEFAULT_SIZE,
+            .color = THEME_COLOR_DARK_GRAY,
+            .texture = NULL,
+        })
+    };
+
+    // Battery indicator
+    cluster_data->battery = ClusterData::Battery{
+        .cli = ClusterLightIndicator(ClusterIcon{
+            .path = "../src/assets/images/battery.svg",
+            .position = calc_icon_pos(6),
+            .size = IC_ICON_DEFAULT_SIZE,
+            .color = THEME_COLOR_DARK_GRAY,
+            .texture = NULL,
+        })
+    };
+
+    // Temperature indicator
+    cluster_data->temperature = ClusterData::Temperature{
+        .cli = ClusterLightIndicator(ClusterIcon{
+            .path = "../src/assets/images/temperature.svg",
+            .position = calc_icon_pos(7),
+            .size = IC_ICON_DEFAULT_SIZE,
+            .color = THEME_COLOR_DARK_GRAY,
+            .texture = NULL,
+        })
+    };
+
+    // Check engine indicator
+    cluster_data->engine = ClusterData::Engine{
+        .cli = ClusterLightIndicator(ClusterIcon{
+            .path = "../src/assets/images/engine.svg",
+            .position = calc_icon_pos(8),
+            .size = IC_ICON_DEFAULT_SIZE,
+            .color = THEME_COLOR_DARK_GRAY,
+            .texture = NULL,
+        })
+    };
+
+    // Door lock indicator
+    cluster_data->door_lock = ClusterData::DoorLock{
+        .cli = ClusterLightIndicator(ClusterIcon{
+            .path = "../src/assets/images/door_lock.svg",
+            .position = calc_icon_pos(9),
+            .size = IC_ICON_DEFAULT_SIZE,
+            .color = THEME_COLOR_DARK_GRAY,
+            .texture = NULL,
+        })
+    };
+
+    // ABS indicator
+    cluster_data->abs = ClusterData::ABS{
+        .cli = ClusterLightIndicator(ClusterIcon{
+            .path = "../src/assets/images/abs.svg",
+            .position = calc_icon_pos(10),
+            .size = IC_ICON_DEFAULT_SIZE,
+            .color = THEME_COLOR_DARK_GRAY,
+            .texture = NULL,
+        })
     };
 
     InstrumentClusterApplication app(std::move(adapter), std::move(cluster_data), title.c_str(), width, height);
