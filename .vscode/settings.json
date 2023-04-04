@@ -80,5 +80,6 @@
     "queue": "cpp",
     "set": "cpp",
     "typeindex": "cpp"
-  }
+  },
+  "cmake.configureOnOpen": false
 }

@@ -16,10 +16,6 @@ public:
     ClusterLightIndicator(ClusterIcon _icon) {
         icon = _icon;
     }
-
-    void draw() {
-
-    }
 };
 
 class ClusterData
@@ -124,33 +120,4 @@ public:
 
     std::vector<ClusterLightIndicator*> lights;
 
-    // TODO - ClusterLabel entity handling: gear, time, etc.
-
-    ClusterData(): speedometer{}, rpm{}, fuel{}, hand_brake{cli}, headlights{}, wipers{}, arrow_left{}, arrow_right{}, oil{}, battery{}, temperature{}, engine{}, door_lock{}, abs{} {
-        lights.push_back(&hand_brake.cli);
-        lights.push_back(&headlights.cli);
-        lights.push_back(&wipers.cli);
-        lights.push_back(&arrow_left.cli);
-        lights.push_back(&arrow_right.cli);
-        lights.push_back(&oil.cli);
-        lights.push_back(&battery.cli);
-        lights.push_back(&temperature.cli);
-        lights.push_back(&engine.cli);
-        lights.push_back(&door_lock.cli);
-        lights.push_back(&abs.cli);
-    }
-
-    // ClusterData() {
-    //     lights.push_back(hand_brake.cli);
-    //     lights.push_back(headlights.cli);
-    //     lights.push_back(wipers.cli);
-    //     lights.push_back(arrow_left.cli);
-    //     lights.push_back(arrow_right.cli);
-    //     lights.push_back(oil.cli);
-    //     lights.push_back(battery.cli);
-    //     lights.push_back(temperature.cli);
-    //     lights.push_back(engine.cli);
-    //     lights.push_back(door_lock.cli);
-    //     lights.push_back(abs.cli);
-    // }
 };

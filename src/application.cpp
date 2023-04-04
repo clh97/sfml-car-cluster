@@ -44,10 +44,10 @@ InstrumentClusterApplication::InstrumentClusterApplication(std::unique_ptr<Platf
 
     ImFontConfig config;
     // config.SizePixels = 24.0f;
-    io.Fonts->AddFontFromFileTTF("../src/assets/OpenSans-Medium.ttf", 14.0f, &config);
-    io.Fonts->AddFontFromFileTTF("../src/assets/OpenSans-Medium.ttf", 18.0f, &config);
-    io.Fonts->AddFontFromFileTTF("../src/assets/OpenSans-Medium.ttf", 24.0f, &config);
-    io.Fonts->AddFontFromFileTTF("../src/assets/OpenSans-Medium.ttf", 32.0f, &config);
+    io.Fonts->AddFontFromFileTTF("assets/OpenSans-Medium.ttf", 18.0f, &config);
+    io.Fonts->AddFontFromFileTTF("assets/OpenSans-Medium.ttf", 24.0f, &config);
+    io.Fonts->AddFontFromFileTTF("assets/OpenSans-Medium.ttf", 14.0f, &config);
+    io.Fonts->AddFontFromFileTTF("assets/OpenSans-Medium.ttf", 32.0f, &config);
     io.DisplaySize.x = width;
     io.DisplaySize.y = height;
     io.WantSaveIniSettings = false;
