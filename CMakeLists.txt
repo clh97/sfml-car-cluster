@@ -55,6 +55,11 @@ find_package(NanoSVG REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 link_directories(${SDL2_LIBRARY_DIRS})
 
+if (APPLE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "13.3" CACHE STRING "Minimum OS X deployment version")
+    set(CMAKE_OSX_SYSROOT "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk" CACHE STRING "System root for OS X")
+endif()
+
 # Add executable for the application
 add_executable(InstrumentCluster
     ${SOURCE_CPP}

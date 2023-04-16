@@ -10,12 +10,17 @@ Application::Application(std::unique_ptr<PlatformAdapter> adapter, const char *t
 {
     m_window = m_adapter->CreateWindow(title, width, height);
 
+#ifdef __APPLE__
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+#else
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+#endif
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
     SDL_GL_SetSwapInterval(-1);
 
     m_adapter->SetCurrentContext(m_window);
@@ -161,7 +166,6 @@ InstrumentClusterApplication::InstrumentClusterApplication(std::unique_ptr<Platf
     m_cluster_data->lights.push_back(&m_cluster_data->abs.cli);
     m_cluster_data->lights.push_back(&m_cluster_data->wipers.cli);
 
-
     delta_time = 0.0f;
 }
 
@@ -229,7 +233,6 @@ void InstrumentClusterApplication::Update()
     // {
     //     if (icon->)
     // }
-
 }
 
 void InstrumentClusterApplication::Render()
@@ -258,7 +261,8 @@ void InstrumentClusterApplication::Render()
             ImGui::SliderFloat("RPM", &m_cluster_data->rpm.rpm, m_cluster_data->rpm.range.min, m_cluster_data->rpm.range.max, "%d RPM");
             ImGui::Checkbox("Hand brake", &m_cluster_data->hand_brake.cli.on);
             ImGui::Checkbox("Headlights", &m_cluster_data->headlights.cli.on);
-            if (m_cluster_data->headlights.cli.on) ImGui::Checkbox("Headlights high beam", &m_cluster_data->headlights.high_beam);
+            if (m_cluster_data->headlights.cli.on)
+                ImGui::Checkbox("Headlights high beam", &m_cluster_data->headlights.high_beam);
             ImGui::Checkbox("Wipers", &m_cluster_data->wipers.cli.on);
 
             ImGui::Separator();
@@ -288,7 +292,6 @@ void InstrumentClusterApplication::Render()
             DrawClusterIcon(m_cluster_data->oil.cli.icon, delta_time);
             DrawClusterIcon(m_cluster_data->temperature.cli.icon, delta_time);
             DrawClusterIcon(m_cluster_data->wipers.cli.icon, delta_time);
-
 
             ImGui::PopFont();
             ImGui::EndChild();
