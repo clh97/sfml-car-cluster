@@ -1,123 +1,57 @@
 #pragma once
+
 #include <iostream>
 #include <vector>
+#include <fmt/format.h>
 
+#include "constants.hpp"
 #include "imgui/imgui.h"
 #include "imgui/components/circular_gauge.cpp"
 #include "imgui/components/cluster_icon.cpp"
 
-class ClusterLightIndicator {
-public:
-    bool on = false;
-    ClusterIcon icon;
-    ImVec4 color_on = THEME_COLOR_LIGHT_GRAY;
-    ImVec4 color_off = THEME_COLOR_YELLOW;
-
-    ClusterLightIndicator(ClusterIcon _icon) {
-        icon = _icon;
-    }
-};
-
 class ClusterData
 {
 public:
-    struct Speedometer
+    struct Range
     {
-        float kmh_speed = 0;
+        int min;
+        int max;
+    };
 
-        std::string format = "{} km/h";
-        struct
-        {
-            int min;
-            int max;
-        } range;
-
+    template <typename ValueType>
+    struct GaugeData
+    {
+        ValueType value = 0;
+        std::string format;
+        Range range;
         CircularGauge gauge;
-    } speedometer;
+    };
 
-    struct RPM
-    {
-        float rpm = 0;
-        std::string format = "{} RPM";
+    GaugeData<int> speedometer{0, "{} km/h"};
+    GaugeData<int> rpm{0, "{} RPM"};
+    GaugeData<int> fuel{0, "{} L"};
 
-        struct
-        {
-            int min;
-            int max;
-        } range;
+#define CLUSTER_LIGHT_INDICATOR_STRUCT(name) \
+    struct name                              \
+    {                                        \
+        ClusterLightIndicator cli;           \
+        bool on = false;                     \
+        bool secondary = false;              \
+    } name
 
-        CircularGauge gauge;
-    } rpm;
+    CLUSTER_LIGHT_INDICATOR_STRUCT(hand_brake);
+    CLUSTER_LIGHT_INDICATOR_STRUCT(headlights);
+    CLUSTER_LIGHT_INDICATOR_STRUCT(wipers);
+    CLUSTER_LIGHT_INDICATOR_STRUCT(arrow_left);
+    CLUSTER_LIGHT_INDICATOR_STRUCT(arrow_right);
+    CLUSTER_LIGHT_INDICATOR_STRUCT(oil);
+    CLUSTER_LIGHT_INDICATOR_STRUCT(battery);
+    CLUSTER_LIGHT_INDICATOR_STRUCT(temperature);
+    CLUSTER_LIGHT_INDICATOR_STRUCT(engine);
+    CLUSTER_LIGHT_INDICATOR_STRUCT(door_lock);
+    CLUSTER_LIGHT_INDICATOR_STRUCT(abs);
 
-    struct Fuel
-    {
-        float fuel = 0;
-        std::string format = "{} L";
-        struct
-        {
-            int min;
-            int max;
-        } range;
+#undef CLUSTER_LIGHT_INDICATOR_STRUCT
 
-        CircularGauge gauge;
-    } fuel;
-
-    struct HandBrake
-    {
-        ClusterLightIndicator cli;
-    } hand_brake;
-
-    struct Headlights
-    {
-        ClusterLightIndicator cli;
-        bool high_beam = false;
-    } headlights;
-
-    struct Wipers
-    {
-        ClusterLightIndicator cli;
-    } wipers;
-
-    struct ArrowLeft
-    {
-        ClusterLightIndicator cli;
-    } arrow_left;
-
-    struct ArrowRight
-    {
-        ClusterLightIndicator cli;
-    } arrow_right;
-
-    struct Oil
-    {
-        ClusterLightIndicator cli;
-    } oil;
-
-    struct Battery
-    {
-        ClusterLightIndicator cli;
-    } battery;
-
-    struct Temperature
-    {
-        ClusterLightIndicator cli;
-    } temperature;
-
-    struct Engine
-    {
-        ClusterLightIndicator cli;
-    } engine;
-
-    struct DoorLock
-    {
-        ClusterLightIndicator cli;
-    } door_lock;
-
-    struct ABS
-    {
-        ClusterLightIndicator cli;
-    } abs;
-
-    std::vector<ClusterLightIndicator*> lights;
-
+    std::vector<ClusterLightIndicator *> lights;
 };

@@ -14,7 +14,7 @@ int main(int argc, char * argv[]) {
         return 1;
     }
 
-    std::unique_ptr < PlatformAdapter > adapter = std::make_unique < OpenGLAdapter > ();
+    std::unique_ptr <PlatformAdapter> adapter = std::make_unique < OpenGLAdapter > ();
 
     const int width = 1920;
     const int height = 550;
@@ -39,9 +39,9 @@ int main(int argc, char * argv[]) {
     };
 
     std::unique_ptr < ClusterData > cluster_data = std::make_unique < ClusterData > (ClusterData {
-        .speedometer = ClusterData::Speedometer {
-                .kmh_speed = 0.0f,
-                    .format = "{} km/h",
+        .speedometer = ClusterData::GaugeData<int>{
+                .value = 0,
+                    .format = "%d km/h",
                     .range = {
                         0,
                         280
@@ -76,11 +76,14 @@ int main(int argc, char * argv[]) {
                         }
                     }
             },
-            .rpm = ClusterData::RPM {
-                .rpm = 0.0f, .format = "{} RPM", .range = {
+            .rpm = ClusterData::GaugeData<int>{
+                .value = 0,
+                .format = "%d RPM",
+                .range = {
                     0,
                     8000
-                }, .gauge = {
+                },
+                .gauge = {
                     .center = {
                         static_cast < float > (width - (width / 2.75 - 250) - 50),
                         static_cast < float > (height * 0.5),
@@ -110,8 +113,8 @@ int main(int argc, char * argv[]) {
                     }
                 }
             },
-            .fuel = ClusterData::Fuel {
-                .fuel = 0, .format = "{} L", .range = {
+            .fuel = ClusterData::GaugeData<int>{
+                .value = 0, .format = "{} L", .range = {
                         .min = 0,
                         .max = 50,
                     },
@@ -145,104 +148,126 @@ int main(int argc, char * argv[]) {
                             }
                     }
             },
-            .hand_brake = ClusterData::HandBrake {
-                .cli = ClusterLightIndicator(ClusterIcon {
-                    .path = "assets/images/parking_brake.svg",
-                        .texture = NULL,
-                        .size = IC_ICON_DEFAULT_SIZE,
-                        .position = calc_icon_pos(1),
-                        .color = THEME_COLOR_DARK_GRAY,
-                })
-            },
-            .headlights = ClusterData::Headlights {
-                .cli = ClusterLightIndicator(ClusterIcon {
-                    .path = "assets/images/headlights.svg",
-                        .texture = NULL,
-                        .size = IC_ICON_DEFAULT_SIZE,
-                        .position = calc_icon_pos(2),
-                        .color = THEME_COLOR_DARK_GRAY,
-                })
-            },
-            .wipers = ClusterData::Wipers {
-                .cli = ClusterLightIndicator(ClusterIcon {
-                    .path = "assets/images/wipers.svg",
-                        .texture = NULL,
-                        .size = IC_ICON_DEFAULT_SIZE,
-                        .position = calc_icon_pos(3),
-                        .color = THEME_COLOR_DARK_GRAY,
-                })
-            },
-            .arrow_left = ClusterData::ArrowLeft {
-                .cli = ClusterLightIndicator(ClusterIcon {
-                    .path = "assets/images/arrow_left.svg",
+            .hand_brake = {
+                .cli = {
+                    .icon = {
+                        .path = "assets/images/hand_brake.svg",
                         .texture = NULL,
                         .size = IC_ICON_DEFAULT_SIZE,
                         .position = calc_icon_pos(0),
                         .color = THEME_COLOR_DARK_GRAY,
-                })
+                    }
+                }
             },
-            .arrow_right = ClusterData::ArrowRight {
-                .cli = ClusterLightIndicator(ClusterIcon {
-                    .path = "assets/images/arrow_right.svg",
+            .headlights = {
+                .cli = {
+                    .icon = {
+                        .path = "assets/images/headlights.svg",
+                        .texture = NULL,
+                        .size = IC_ICON_DEFAULT_SIZE,
+                        .position = calc_icon_pos(2),
+                        .color = THEME_COLOR_DARK_GRAY,
+                    }
+                }
+            },
+            .wipers = {
+                .cli = {
+                    .icon {
+                        .path = "assets/images/wipers.svg",
+                        .texture = NULL,
+                        .size = IC_ICON_DEFAULT_SIZE,
+                        .position = calc_icon_pos(3),
+                        .color = THEME_COLOR_DARK_GRAY,
+                    }
+                }
+            },
+            .arrow_left = {
+                .cli = {
+                    .icon {
+                        .path = "assets/images/arrow_left.svg",
+                        .texture = NULL,
+                        .size = IC_ICON_DEFAULT_SIZE,
+                        .position = calc_icon_pos(0),
+                        .color = THEME_COLOR_DARK_GRAY,
+                    }
+                }
+            },
+            .arrow_right = {
+                .cli = {
+                    .icon {
+                        .path = "assets/images/arrow_right.svg",
                         .texture = NULL,
                         .size = IC_ICON_DEFAULT_SIZE,
                         .position = calc_icon_pos(4),
                         .color = THEME_COLOR_DARK_GRAY,
-                })
+                    }
+                }
             },
-            .oil = ClusterData::Oil {
-                .cli = ClusterLightIndicator(ClusterIcon {
-                    .path = "assets/images/oil.svg",
+            .oil = {
+                .cli = {
+                    .icon {
+                        .path = "assets/images/oil.svg",
                         .texture = NULL,
                         .size = IC_ICON_DEFAULT_SIZE,
                         .position = calc_icon_pos(5),
                         .color = THEME_COLOR_DARK_GRAY,
-                })
+                    }
+                }
             },
-            .battery = ClusterData::Battery {
-                .cli = ClusterLightIndicator(ClusterIcon {
-                    .path = "assets/images/battery.svg",
+            .battery = {
+                .cli = {
+                    .icon {
+                        .path = "assets/images/battery.svg",
                         .texture = NULL,
                         .size = IC_ICON_DEFAULT_SIZE,
                         .position = calc_icon_pos(6),
                         .color = THEME_COLOR_DARK_GRAY,
-                })
+                    }
+                }
             },
-            .temperature = ClusterData::Temperature {
-                .cli = ClusterLightIndicator(ClusterIcon {
-                    .path = "assets/images/temperature.svg",
+            .temperature = {
+                .cli = {
+                    .icon {
+                        .path = "assets/images/temperature.svg",
                         .texture = NULL,
                         .size = IC_ICON_DEFAULT_SIZE,
                         .position = calc_icon_pos(7),
                         .color = THEME_COLOR_DARK_GRAY,
-                })
+                    }
+                }
             },
-            .engine = ClusterData::Engine {
-                .cli = ClusterLightIndicator(ClusterIcon {
-                    .path = "assets/images/engine.svg",
+            .engine = {
+                .cli = {
+                    .icon {
+                        .path = "assets/images/engine.svg",
                         .texture = NULL,
                         .size = IC_ICON_DEFAULT_SIZE,
                         .position = calc_icon_pos(8),
                         .color = THEME_COLOR_DARK_GRAY,
-                })
+                    }
+                }
             },
-            .door_lock = ClusterData::DoorLock {
-                .cli = ClusterLightIndicator(ClusterIcon {
-                    .path = "assets/images/door_lock.svg",
+            .door_lock = {
+                .cli = {
+                    .icon {
+                        .path = "assets/images/door_lock.svg",
                         .texture = NULL,
                         .size = IC_ICON_DEFAULT_SIZE,
                         .position = calc_icon_pos(9),
                         .color = THEME_COLOR_DARK_GRAY,
-                })
+                    }
+                }
             },
-            .abs = ClusterData::ABS {
-                .cli = ClusterLightIndicator(ClusterIcon {
-                    .path = "assets/images/abs.svg",
+            .abs = {
+                .cli = {
+                    .icon {
+                        .path = "assets/images/abs.svg",
                         .texture = NULL,
                         .size = IC_ICON_DEFAULT_SIZE,
                         .position = calc_icon_pos(10),
                         .color = THEME_COLOR_DARK_GRAY,
-                })
+                    }
+                }
             }
     });
 

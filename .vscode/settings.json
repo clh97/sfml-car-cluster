@@ -79,7 +79,8 @@
         "list": "cpp",
         "queue": "cpp",
         "set": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "__verbose_abort": "cpp"
     },
     "cmake.configureOnOpen": false
 }

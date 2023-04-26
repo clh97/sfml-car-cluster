@@ -28,7 +28,7 @@ file(GLOB SOURCE_HEADER
 
 # Add the include directories for Unix systems
 include(GNUInstallDirs)
-include_directories(/usr/local/include /opt/homebrew/include /opt/homebrew/Cellar/sdl2/2.26.3/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src /usr/local/include /opt/homebrew/include /opt/homebrew/Cellar/sdl2/2.26.3/include)
 
 # Add the library directories
 link_directories(/usr/local/lib /opt/homebrew/Cellar/sdl2/2.26.3/lib)

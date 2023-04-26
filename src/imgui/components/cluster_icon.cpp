@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+
 #include "../imgui.h"
 #include "../imgui_stdlib.h"
 
@@ -8,15 +9,41 @@ struct ClusterIcon
 {
     std::string name;
     std::string path;
-    GLuint texture;
+    unsigned int texture;
     ImVec2 size;
     ImVec2 position;
     ImVec4 color;
 };
 
-static void DrawClusterIcon(ClusterIcon &icon, float delta_time)
+struct ClusterLightIndicator
 {
-    ImGui::GetWindowDrawList()->AddImage((void *)(intptr_t)icon.texture, icon.position, ImVec2(icon.position.x + icon.size.x, icon.position.y + icon.size.y), ImVec2(0, 0), ImVec2(1, 1), ImGui::ColorConvertFloat4ToU32(icon.color));
+    bool on = false;
+    ClusterIcon icon;
+    ImVec4 color_on = THEME_COLOR_LIGHT_GRAY;
+    ImVec4 color_off = THEME_COLOR_YELLOW;
+};
+
+static void DrawClusterIcon(ClusterLightIndicator cli, float delta_time)
+{
+    ImU32 color = ImGui::ColorConvertFloat4ToU32(cli.icon.color);
+
+    if (cli.on)
+    {
+        color = ImGui::ColorConvertFloat4ToU32(cli.color_on);
+    }
+    else
+    {
+        color = ImGui::ColorConvertFloat4ToU32(cli.color_off);
+    }
+
+
+    ImGui::GetWindowDrawList()->AddImage(
+        (void *)(intptr_t)cli.icon.texture,
+        cli.icon.position,
+        ImVec2(cli.icon.position.x + cli.icon.size.x, cli.icon.position.y + cli.icon.size.y),
+        ImVec2(0, 0), ImVec2(1, 1),
+        ImGui::ColorConvertFloat4ToU32(cli.icon.color)
+    );
 }
 
 static void DrawClusterIconEditor(ClusterIcon &icon, std::string title, float delta_time)

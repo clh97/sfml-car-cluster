@@ -1,3 +1,4 @@
+#include "cluster_data.hpp"
 #include "application.hpp"
 #include "svg_renderer.hpp"
 
@@ -256,13 +257,21 @@ void InstrumentClusterApplication::Render()
             ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
 
             /* Cluster data */
-            ImGui::Text("Cluster data");
-            ImGui::SliderFloat("Speed", &m_cluster_data->speedometer.kmh_speed, (float)m_cluster_data->speedometer.range.min, (float)m_cluster_data->speedometer.range.max, "%d km/h");
-            ImGui::SliderFloat("RPM", &m_cluster_data->rpm.rpm, m_cluster_data->rpm.range.min, m_cluster_data->rpm.range.max, "%d RPM");
+            // ImGui::Text("Cluster data");
+            // fmt::print("{}", m_cluster_data->speedometer.range.max);
+            // ImGui::SliderInt("Speed", &m_cluster_data->speedometer.kmh_speed, m_cluster_data->speedometer.range.min, m_cluster_data->speedometer.range.max, m_cluster_data->speedometer.format.c_str());
+            // ImGui::Text("Current Speed: %d", m_cluster_data->speedometer.kmh_speed);
+            // ImGui::SliderInt("RPM", &m_cluster_data->rpm.rpm, m_cluster_data->rpm.range.min, m_cluster_data->rpm.range.max, m_cluster_data->rpm.format.c_str());
+
+            // fmt::print("{} {}\n", m_cluster_data->speedometer.kmh_speed, m_cluster_data->speedometer.gauge.label);
+
+            DrawCircularGaugeEditor(m_cluster_data->speedometer.gauge, "Speedometer");
+            DrawCircularGaugeEditor(m_cluster_data->rpm.gauge, "Tachometer");
+
             ImGui::Checkbox("Hand brake", &m_cluster_data->hand_brake.cli.on);
             ImGui::Checkbox("Headlights", &m_cluster_data->headlights.cli.on);
             if (m_cluster_data->headlights.cli.on)
-                ImGui::Checkbox("Headlights high beam", &m_cluster_data->headlights.high_beam);
+                ImGui::Checkbox("Headlights high beam", &m_cluster_data->headlights.secondary);
             ImGui::Checkbox("Wipers", &m_cluster_data->wipers.cli.on);
 
             ImGui::Separator();
@@ -277,21 +286,23 @@ void InstrumentClusterApplication::Render()
             ImGui::BeginChild("Cluster", ImVec2(window_size.x, window_size.y), false);
             ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[2]);
             /* Draw gauges */
+            ImGui::Text("Gauges");
+            ImGui::Text(m_cluster_data->speedometer.gauge.label.c_str());
             DrawCircularGauge(m_cluster_data->speedometer.gauge, delta_time);
             DrawCircularGauge(m_cluster_data->rpm.gauge, delta_time);
 
             /* Draw icons */
             // DrawClusterIcon(m_cluster_data->abs.icon, delta_time);
-            DrawClusterIcon(m_cluster_data->arrow_left.cli.icon, delta_time);
-            DrawClusterIcon(m_cluster_data->arrow_right.cli.icon, delta_time);
-            DrawClusterIcon(m_cluster_data->battery.cli.icon, delta_time);
-            DrawClusterIcon(m_cluster_data->door_lock.cli.icon, delta_time);
-            DrawClusterIcon(m_cluster_data->engine.cli.icon, delta_time);
-            DrawClusterIcon(m_cluster_data->hand_brake.cli.icon, delta_time);
-            DrawClusterIcon(m_cluster_data->headlights.cli.icon, delta_time);
-            DrawClusterIcon(m_cluster_data->oil.cli.icon, delta_time);
-            DrawClusterIcon(m_cluster_data->temperature.cli.icon, delta_time);
-            DrawClusterIcon(m_cluster_data->wipers.cli.icon, delta_time);
+            // DrawClusterIcon(m_cluster_data->arrow_left.cli, delta_time);
+            // DrawClusterIcon(m_cluster_data->arrow_right.cli, delta_time);
+            // DrawClusterIcon(m_cluster_data->battery.cli, delta_time);
+            // DrawClusterIcon(m_cluster_data->door_lock.cli, delta_time);
+            // DrawClusterIcon(m_cluster_data->engine.cli, delta_time);
+            // DrawClusterIcon(m_cluster_data->hand_brake.cli, delta_time);
+            // DrawClusterIcon(m_cluster_data->headlights.cli, delta_time);
+            // DrawClusterIcon(m_cluster_data->oil.cli, delta_time);
+            // DrawClusterIcon(m_cluster_data->temperature.cli, delta_time);
+            // DrawClusterIcon(m_cluster_data->wipers.cli, delta_time);
 
             ImGui::PopFont();
             ImGui::EndChild();

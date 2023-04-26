@@ -40,7 +40,7 @@ protected:
 class InstrumentClusterApplication : public Application
 {
 public:
-    InstrumentClusterApplication(std::unique_ptr<PlatformAdapter> adapter, std::unique_ptr<ClusterData> cluster_data, const char *title, int width, int height);
+    InstrumentClusterApplication(std::unique_ptr<PlatformAdapter> adapter, std::unique_ptr<ClusterData> _cluster_data, const char *title, int width, int height);
     ~InstrumentClusterApplication();
 
     void Run() override;
