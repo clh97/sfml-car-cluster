@@ -1,0 +1,71 @@
+version: 1.0.0
+themes:
+    - name: "default"
+      path: "themes/default.yaml"
+screen:
+    width: 1920
+    height: 550
+cluster_data:
+    gauges:
+        - name: "Tachometer"
+          format: "%d RPM"
+          range: [0, 8000]
+          gauge:
+              radius: 250
+              center: [0.33, 0.5]
+              hide_outline: false
+              hide_bottom: false
+              num_ticks: 10
+              start_angle: 135
+              angle_range: 270
+              critical_zone:
+                  enabled: true
+                  start: 0.8
+        - name: "Speedometer"
+          format: "%d km/h"
+          range: [0, 200]
+          gauge:
+              radius: 250
+              center: [0.66, 0.5]
+              hide_outline: false
+              hide_bottom: false
+              num_ticks: 14
+              start_angle: 135
+              angle_range: 270
+              critical_zone:
+                  enabled: true
+                  start: 0.8
+    icons:
+        - name: "Arrow left"
+          path: "assets/images/arrow_left.svg"
+          position_index: 0
+        - name: "Hand brake"
+          path: "assets/images/hand_brake.svg"
+          position_index: 1
+        - name: "Headlights"
+          path: "assets/images/headlights.svg"
+          position_index: 2
+        - name: "Wipers"
+          path: "assets/images/wipers.svg"
+          position_index: 3
+        - name: "Arrow right"
+          path: "assets/images/arrow_right.svg"
+          position_index: 4
+        - name: "Oil"
+          path: "assets/images/oil.svg"
+          position_index: 5
+        - name: "Battery"
+          path: "assets/images/battery.svg"
+          position_index: 6
+        - name: "Temperature"
+          path: "assets/images/temperature.svg"
+          position_index: 7
+        - name: "Engine"
+          path: "assets/images/engine.svg"
+          position_index: 8
+        - name: "Door lock"
+          path: "assets/images/door_lock.svg"
+          position_index: 9
+        - name: "ABS"
+          path: "assets/images/abs.svg"
+          position_index: 10

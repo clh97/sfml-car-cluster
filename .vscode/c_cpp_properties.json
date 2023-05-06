@@ -29,7 +29,8 @@
             "intelliSenseMode": "macos-clang-arm64",
             "configurationProvider": "ms-vscode.cmake-tools",
             "cStandard": "c11",
-            "cppStandard": "c++17"
+            "cppStandard": "c++17",
+            "cwd": "${workspaceFolder}"
         }
     ],
     "version": 4

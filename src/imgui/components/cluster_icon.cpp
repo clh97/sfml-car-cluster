@@ -10,6 +10,7 @@ struct ClusterIcon
     std::string name;
     std::string path;
     unsigned int texture;
+    int position_index;
     ImVec2 size;
     ImVec2 position;
     ImVec4 color;
@@ -36,14 +37,12 @@ static void DrawClusterIcon(ClusterLightIndicator cli, float delta_time)
         color = ImGui::ColorConvertFloat4ToU32(cli.color_off);
     }
 
-
     ImGui::GetWindowDrawList()->AddImage(
         (void *)(intptr_t)cli.icon.texture,
         cli.icon.position,
         ImVec2(cli.icon.position.x + cli.icon.size.x, cli.icon.position.y + cli.icon.size.y),
         ImVec2(0, 0), ImVec2(1, 1),
-        ImGui::ColorConvertFloat4ToU32(cli.icon.color)
-    );
+        ImGui::ColorConvertFloat4ToU32(cli.icon.color));
 }
 
 static void DrawClusterIconEditor(ClusterIcon &icon, std::string title, float delta_time)

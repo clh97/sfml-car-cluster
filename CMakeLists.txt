@@ -52,6 +52,9 @@ find_package(OpenGL REQUIRED)
 # Find NanoSVG
 find_package(NanoSVG REQUIRED)
 
+# Find yaml-cpp
+find_package(yaml-cpp REQUIRED)
+
 include_directories(${SDL2_INCLUDE_DIRS})
 link_directories(${SDL2_LIBRARY_DIRS})
 
@@ -85,6 +88,7 @@ target_link_libraries(InstrumentCluster
     SDL2_image::SDL2_image
     NanoSVG::nanosvg
     NanoSVG::nanosvgrast
+    yaml-cpp
 )
 
 # Apple specific libraries

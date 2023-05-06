@@ -34,3 +34,14 @@ public:
 private:
     SDL_GLContext gl_context_;
 };
+
+class MetalAdapter : public PlatformAdapter
+{
+public:
+    SDL_Window *CreateWindow(const char *title, int width, int height) override;
+    void DestroyWindow(SDL_Window *window);
+    void SetCurrentContext(SDL_Window *window);
+    void SwapBuffers(SDL_Window *window);
+private:
+    SDL_GLContext gl_context_;
+};

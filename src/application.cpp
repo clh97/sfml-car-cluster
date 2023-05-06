@@ -78,94 +78,94 @@ InstrumentClusterApplication::InstrumentClusterApplication(std::unique_ptr<Platf
     // DrawClusterIcon(m_cluster_data->wipers.icon, delta_time);
 
     fmt::print("Loading textures...\n");
-    m_cluster_data->arrow_left.cli.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->arrow_left.cli.icon.path,
-        m_cluster_data->arrow_left.cli.icon.size,
-        m_cluster_data->arrow_left.cli.icon.position,
-        m_cluster_data->arrow_left.cli.icon.color,
-        gl_context);
+    // m_cluster_data->arrow_left.cli.icon.texture = svg_renderer.renderSVG(
+    //     m_cluster_data->arrow_left.cli.icon.path,
+    //     m_cluster_data->arrow_left.cli.icon.size,
+    //     m_cluster_data->arrow_left.cli.icon.position,
+    //     m_cluster_data->arrow_left.cli.icon.color,
+    //     gl_context);
 
-    m_cluster_data->arrow_right.cli.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->arrow_right.cli.icon.path,
-        m_cluster_data->arrow_right.cli.icon.size,
-        m_cluster_data->arrow_right.cli.icon.position,
-        m_cluster_data->arrow_right.cli.icon.color,
-        gl_context);
+    // m_cluster_data->arrow_right.cli.icon.texture = svg_renderer.renderSVG(
+    //     m_cluster_data->arrow_right.cli.icon.path,
+    //     m_cluster_data->arrow_right.cli.icon.size,
+    //     m_cluster_data->arrow_right.cli.icon.position,
+    //     m_cluster_data->arrow_right.cli.icon.color,
+    //     gl_context);
 
-    m_cluster_data->battery.cli.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->battery.cli.icon.path,
-        m_cluster_data->battery.cli.icon.size,
-        m_cluster_data->battery.cli.icon.position,
-        m_cluster_data->battery.cli.icon.color,
-        gl_context);
+    // m_cluster_data->battery.cli.icon.texture = svg_renderer.renderSVG(
+    //     m_cluster_data->battery.cli.icon.path,
+    //     m_cluster_data->battery.cli.icon.size,
+    //     m_cluster_data->battery.cli.icon.position,
+    //     m_cluster_data->battery.cli.icon.color,
+    //     gl_context);
 
-    m_cluster_data->door_lock.cli.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->door_lock.cli.icon.path,
-        m_cluster_data->door_lock.cli.icon.size,
-        m_cluster_data->door_lock.cli.icon.position,
-        m_cluster_data->door_lock.cli.icon.color,
-        gl_context);
+    // m_cluster_data->door_lock.cli.icon.texture = svg_renderer.renderSVG(
+    //     m_cluster_data->door_lock.cli.icon.path,
+    //     m_cluster_data->door_lock.cli.icon.size,
+    //     m_cluster_data->door_lock.cli.icon.position,
+    //     m_cluster_data->door_lock.cli.icon.color,
+    //     gl_context);
 
-    m_cluster_data->engine.cli.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->engine.cli.icon.path,
-        m_cluster_data->engine.cli.icon.size,
-        m_cluster_data->engine.cli.icon.position,
-        m_cluster_data->engine.cli.icon.color,
-        gl_context);
+    // m_cluster_data->engine.cli.icon.texture = svg_renderer.renderSVG(
+    //     m_cluster_data->engine.cli.icon.path,
+    //     m_cluster_data->engine.cli.icon.size,
+    //     m_cluster_data->engine.cli.icon.position,
+    //     m_cluster_data->engine.cli.icon.color,
+    //     gl_context);
 
-    m_cluster_data->hand_brake.cli.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->hand_brake.cli.icon.path,
-        m_cluster_data->hand_brake.cli.icon.size,
-        m_cluster_data->hand_brake.cli.icon.position,
-        m_cluster_data->hand_brake.cli.icon.color,
-        gl_context);
+    // m_cluster_data->hand_brake.cli.icon.texture = svg_renderer.renderSVG(
+    //     m_cluster_data->hand_brake.cli.icon.path,
+    //     m_cluster_data->hand_brake.cli.icon.size,
+    //     m_cluster_data->hand_brake.cli.icon.position,
+    //     m_cluster_data->hand_brake.cli.icon.color,
+    //     gl_context);
 
-    m_cluster_data->headlights.cli.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->headlights.cli.icon.path,
-        m_cluster_data->headlights.cli.icon.size,
-        m_cluster_data->headlights.cli.icon.position,
-        m_cluster_data->headlights.cli.icon.color,
-        gl_context);
+    // m_cluster_data->headlights.cli.icon.texture = svg_renderer.renderSVG(
+    //     m_cluster_data->headlights.cli.icon.path,
+    //     m_cluster_data->headlights.cli.icon.size,
+    //     m_cluster_data->headlights.cli.icon.position,
+    //     m_cluster_data->headlights.cli.icon.color,
+    //     gl_context);
 
-    m_cluster_data->oil.cli.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->oil.cli.icon.path,
-        m_cluster_data->oil.cli.icon.size,
-        m_cluster_data->oil.cli.icon.position,
-        m_cluster_data->oil.cli.icon.color,
-        gl_context);
+    // m_cluster_data->oil.cli.icon.texture = svg_renderer.renderSVG(
+    //     m_cluster_data->oil.cli.icon.path,
+    //     m_cluster_data->oil.cli.icon.size,
+    //     m_cluster_data->oil.cli.icon.position,
+    //     m_cluster_data->oil.cli.icon.color,
+    //     gl_context);
 
-    m_cluster_data->temperature.cli.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->temperature.cli.icon.path,
-        m_cluster_data->temperature.cli.icon.size,
-        m_cluster_data->temperature.cli.icon.position,
-        m_cluster_data->temperature.cli.icon.color,
-        gl_context);
+    // m_cluster_data->temperature.cli.icon.texture = svg_renderer.renderSVG(
+    //     m_cluster_data->temperature.cli.icon.path,
+    //     m_cluster_data->temperature.cli.icon.size,
+    //     m_cluster_data->temperature.cli.icon.position,
+    //     m_cluster_data->temperature.cli.icon.color,
+    //     gl_context);
 
-    m_cluster_data->abs.cli.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->abs.cli.icon.path,
-        m_cluster_data->abs.cli.icon.size,
-        m_cluster_data->abs.cli.icon.position,
-        m_cluster_data->abs.cli.icon.color,
-        gl_context);
+    // m_cluster_data->abs.cli.icon.texture = svg_renderer.renderSVG(
+    //     m_cluster_data->abs.cli.icon.path,
+    //     m_cluster_data->abs.cli.icon.size,
+    //     m_cluster_data->abs.cli.icon.position,
+    //     m_cluster_data->abs.cli.icon.color,
+    //     gl_context);
 
-    m_cluster_data->wipers.cli.icon.texture = svg_renderer.renderSVG(
-        m_cluster_data->wipers.cli.icon.path,
-        m_cluster_data->wipers.cli.icon.size,
-        m_cluster_data->wipers.cli.icon.position,
-        m_cluster_data->wipers.cli.icon.color,
-        gl_context);
+    // m_cluster_data->wipers.cli.icon.texture = svg_renderer.renderSVG(
+    //     m_cluster_data->wipers.cli.icon.path,
+    //     m_cluster_data->wipers.cli.icon.size,
+    //     m_cluster_data->wipers.cli.icon.position,
+    //     m_cluster_data->wipers.cli.icon.color,
+    //     gl_context);
 
-    m_cluster_data->lights.push_back(&m_cluster_data->arrow_left.cli);
-    m_cluster_data->lights.push_back(&m_cluster_data->arrow_right.cli);
-    m_cluster_data->lights.push_back(&m_cluster_data->battery.cli);
-    m_cluster_data->lights.push_back(&m_cluster_data->door_lock.cli);
-    m_cluster_data->lights.push_back(&m_cluster_data->engine.cli);
-    m_cluster_data->lights.push_back(&m_cluster_data->hand_brake.cli);
-    m_cluster_data->lights.push_back(&m_cluster_data->headlights.cli);
-    m_cluster_data->lights.push_back(&m_cluster_data->oil.cli);
-    m_cluster_data->lights.push_back(&m_cluster_data->temperature.cli);
-    m_cluster_data->lights.push_back(&m_cluster_data->abs.cli);
-    m_cluster_data->lights.push_back(&m_cluster_data->wipers.cli);
+    // m_cluster_data->lights.push_back(&m_cluster_data->arrow_left.cli);
+    // m_cluster_data->lights.push_back(&m_cluster_data->arrow_right.cli);
+    // m_cluster_data->lights.push_back(&m_cluster_data->battery.cli);
+    // m_cluster_data->lights.push_back(&m_cluster_data->door_lock.cli);
+    // m_cluster_data->lights.push_back(&m_cluster_data->engine.cli);
+    // m_cluster_data->lights.push_back(&m_cluster_data->hand_brake.cli);
+    // m_cluster_data->lights.push_back(&m_cluster_data->headlights.cli);
+    // m_cluster_data->lights.push_back(&m_cluster_data->oil.cli);
+    // m_cluster_data->lights.push_back(&m_cluster_data->temperature.cli);
+    // m_cluster_data->lights.push_back(&m_cluster_data->abs.cli);
+    // m_cluster_data->lights.push_back(&m_cluster_data->wipers.cli);
 
     delta_time = 0.0f;
 }
@@ -246,68 +246,68 @@ void InstrumentClusterApplication::Render()
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    {
-        ImGui::SetNextWindowSize(ImVec2(window_size.x, window_size.y));
-        ImGui::SetNextWindowPos(ImVec2(0, 0));
-        ImGui::Begin("Gauge", &is_open, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoNav);
+    // {
+    //     ImGui::SetNextWindowSize(ImVec2(window_size.x, window_size.y));
+    //     ImGui::SetNextWindowPos(ImVec2(0, 0));
+    //     ImGui::Begin("Gauge", &is_open, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoNav);
 
-        if (show_editor)
-        {
-            ImGui::BeginChild("Editor", ImVec2(window_size.x / 2, window_size.y), true, ImGuiWindowFlags_NoBackground);
-            ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
+    //     if (show_editor)
+    //     {
+    //         ImGui::BeginChild("Editor", ImVec2(window_size.x / 2, window_size.y), true, ImGuiWindowFlags_NoBackground);
+    //         ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
 
-            /* Cluster data */
-            // ImGui::Text("Cluster data");
-            // fmt::print("{}", m_cluster_data->speedometer.range.max);
-            // ImGui::SliderInt("Speed", &m_cluster_data->speedometer.kmh_speed, m_cluster_data->speedometer.range.min, m_cluster_data->speedometer.range.max, m_cluster_data->speedometer.format.c_str());
-            // ImGui::Text("Current Speed: %d", m_cluster_data->speedometer.kmh_speed);
-            // ImGui::SliderInt("RPM", &m_cluster_data->rpm.rpm, m_cluster_data->rpm.range.min, m_cluster_data->rpm.range.max, m_cluster_data->rpm.format.c_str());
+    //         /* Cluster data */
+    //         // ImGui::Text("Cluster data");
+    //         // fmt::print("{}", m_cluster_data->speedometer.range.max);
+    //         // ImGui::SliderInt("Speed", &m_cluster_data->speedometer.kmh_speed, m_cluster_data->speedometer.range.min, m_cluster_data->speedometer.range.max, m_cluster_data->speedometer.format.c_str());
+    //         // ImGui::Text("Current Speed: %d", m_cluster_data->speedometer.kmh_speed);
+    //         // ImGui::SliderInt("RPM", &m_cluster_data->rpm.rpm, m_cluster_data->rpm.range.min, m_cluster_data->rpm.range.max, m_cluster_data->rpm.format.c_str());
 
-            // fmt::print("{} {}\n", m_cluster_data->speedometer.kmh_speed, m_cluster_data->speedometer.gauge.label);
+    //         // fmt::print("{} {}\n", m_cluster_data->speedometer.kmh_speed, m_cluster_data->speedometer.gauge.label);
 
-            DrawCircularGaugeEditor(m_cluster_data->speedometer.gauge, "Speedometer");
-            DrawCircularGaugeEditor(m_cluster_data->rpm.gauge, "Tachometer");
+    //         DrawCircularGaugeEditor(m_cluster_data->speedometer.gauge, "Speedometer");
+    //         DrawCircularGaugeEditor(m_cluster_data->rpm.gauge, "Tachometer");
 
-            ImGui::Checkbox("Hand brake", &m_cluster_data->hand_brake.cli.on);
-            ImGui::Checkbox("Headlights", &m_cluster_data->headlights.cli.on);
-            if (m_cluster_data->headlights.cli.on)
-                ImGui::Checkbox("Headlights high beam", &m_cluster_data->headlights.secondary);
-            ImGui::Checkbox("Wipers", &m_cluster_data->wipers.cli.on);
+    //         ImGui::Checkbox("Hand brake", &m_cluster_data->hand_brake.cli.on);
+    //         ImGui::Checkbox("Headlights", &m_cluster_data->headlights.cli.on);
+    //         if (m_cluster_data->headlights.cli.on)
+    //             ImGui::Checkbox("Headlights high beam", &m_cluster_data->headlights.secondary);
+    //         ImGui::Checkbox("Wipers", &m_cluster_data->wipers.cli.on);
 
-            ImGui::Separator();
+    //         ImGui::Separator();
 
-            ImGui::PopFont();
-            ImGui::EndChild();
-        }
+    //         ImGui::PopFont();
+    //         ImGui::EndChild();
+    //     }
 
-        {
-            ImGui::SameLine();
-            // ImGui::SetNextWindowPos(ImVec2(0, 0));
-            ImGui::BeginChild("Cluster", ImVec2(window_size.x, window_size.y), false);
-            ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[2]);
-            /* Draw gauges */
-            ImGui::Text("Gauges");
-            ImGui::Text(m_cluster_data->speedometer.gauge.label.c_str());
-            DrawCircularGauge(m_cluster_data->speedometer.gauge, delta_time);
-            DrawCircularGauge(m_cluster_data->rpm.gauge, delta_time);
+    //     {
+    //         ImGui::SameLine();
+    //         // ImGui::SetNextWindowPos(ImVec2(0, 0));
+    //         ImGui::BeginChild("Cluster", ImVec2(window_size.x, window_size.y), false);
+    //         ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[2]);
+    //         /* Draw gauges */
+    //         ImGui::Text("Gauges");
+    //         ImGui::Text(m_cluster_data->speedometer.gauge.label.c_str());
+    //         DrawCircularGauge(m_cluster_data->speedometer.gauge, delta_time);
+    //         DrawCircularGauge(m_cluster_data->rpm.gauge, delta_time);
 
-            /* Draw icons */
-            // DrawClusterIcon(m_cluster_data->abs.icon, delta_time);
-            // DrawClusterIcon(m_cluster_data->arrow_left.cli, delta_time);
-            // DrawClusterIcon(m_cluster_data->arrow_right.cli, delta_time);
-            // DrawClusterIcon(m_cluster_data->battery.cli, delta_time);
-            // DrawClusterIcon(m_cluster_data->door_lock.cli, delta_time);
-            // DrawClusterIcon(m_cluster_data->engine.cli, delta_time);
-            // DrawClusterIcon(m_cluster_data->hand_brake.cli, delta_time);
-            // DrawClusterIcon(m_cluster_data->headlights.cli, delta_time);
-            // DrawClusterIcon(m_cluster_data->oil.cli, delta_time);
-            // DrawClusterIcon(m_cluster_data->temperature.cli, delta_time);
-            // DrawClusterIcon(m_cluster_data->wipers.cli, delta_time);
+    //         /* Draw icons */
+    //         // DrawClusterIcon(m_cluster_data->abs.icon, delta_time);
+    //         // DrawClusterIcon(m_cluster_data->arrow_left.cli, delta_time);
+    //         // DrawClusterIcon(m_cluster_data->arrow_right.cli, delta_time);
+    //         // DrawClusterIcon(m_cluster_data->battery.cli, delta_time);
+    //         // DrawClusterIcon(m_cluster_data->door_lock.cli, delta_time);
+    //         // DrawClusterIcon(m_cluster_data->engine.cli, delta_time);
+    //         // DrawClusterIcon(m_cluster_data->hand_brake.cli, delta_time);
+    //         // DrawClusterIcon(m_cluster_data->headlights.cli, delta_time);
+    //         // DrawClusterIcon(m_cluster_data->oil.cli, delta_time);
+    //         // DrawClusterIcon(m_cluster_data->temperature.cli, delta_time);
+    //         // DrawClusterIcon(m_cluster_data->wipers.cli, delta_time);
 
-            ImGui::PopFont();
-            ImGui::EndChild();
-        }
-    }
+    //         ImGui::PopFont();
+    //         ImGui::EndChild();
+    //     }
+    // }
 
     {
         ImGui::End();

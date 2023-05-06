@@ -7,7 +7,7 @@ SDL_Point PlatformAdapter::GetWindowSize(SDL_Window *window)
     return size;
 }
 
-SDL_Window * OpenGLAdapter::CreateWindow(const char *title, int width, int height)
+SDL_Window *OpenGLAdapter::CreateWindow(const char *title, int width, int height)
 {
     SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     return SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,

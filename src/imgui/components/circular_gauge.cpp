@@ -7,6 +7,12 @@
 #include "../../interpolation.cpp"
 #include "../imgui.h"
 
+struct Range
+{
+    int min;
+    int max;
+};
+
 struct CircularGauge
 {
     ImVec2 center;
@@ -36,6 +42,16 @@ struct CircularGauge
         float start_percent;
         ImVec4 color;
     } critical_zone;
+};
+
+template <typename T>
+struct CircularGaugeData
+{
+    std::string name;
+    std::string format;
+    T value = 0;
+    Range range;
+    CircularGauge gauge;
 };
 
 static void DrawCircularGauge(CircularGauge &gauge, float delta_time)
